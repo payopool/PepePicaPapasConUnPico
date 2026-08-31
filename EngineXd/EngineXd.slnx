@@ -1,1 +1,8 @@
-<Solution />
+<Solution>
+  <Configurations>
+    <Platform Name="x64" />
+    <Platform Name="x86" />
+  </Configurations>
+  <Project Path="Grafica3DEngine/Grafica3DEngine.vcxproj" />
+  <Project Path="Sandbox/Sandbox.vcxproj" />
+</Solution>
