@@ -1,1 +1,0 @@
-# GraficasComputacionales3D
