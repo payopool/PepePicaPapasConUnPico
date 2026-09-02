@@ -195,8 +195,8 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="include\Api.h" />
-    <ClInclude Include="include\Engine.h" />
+    <ClInclude Include="include\Engine\Api.h" />
+    <ClInclude Include="include\Engine\Engine.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

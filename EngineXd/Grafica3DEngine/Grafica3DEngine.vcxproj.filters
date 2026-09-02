@@ -23,10 +23,10 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="include\Api.h">
+    <ClInclude Include="include\Engine\Engine.h">
       <Filter>Archivos de encabezado\Engine</Filter>
     </ClInclude>
-    <ClInclude Include="include\Engine.h">
+    <ClInclude Include="include\Engine\Api.h">
       <Filter>Archivos de encabezado\Engine</Filter>
     </ClInclude>
   </ItemGroup>
