@@ -3,6 +3,10 @@
   "WorkspaceRootPath": "D:\\Repos\\GraficasComputacionales3D\\EngineXd\\",
   "Documents": [
     {
+      "AbsoluteMoniker": "D:0:0:{B8BB08C6-72F1-4A63-A0DD-44002E8EE8AA}|Grafica3DEngine\\Grafica3DEngine.vcxproj|D:\\Repos\\GraficasComputacionales3D\\EngineXd\\Grafica3DEngine\\source\\Engine.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
+      "RelativeMoniker": "D:0:0:{B8BB08C6-72F1-4A63-A0DD-44002E8EE8AA}|Grafica3DEngine\\Grafica3DEngine.vcxproj|solutionrelative:Grafica3DEngine\\source\\Engine.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
+    },
+    {
       "AbsoluteMoniker": "D:0:0:{405D31F7-A84C-4979-A63A-C6648D52BFB1}|Sandbox\\Sandbox.vcxproj|D:\\Repos\\GraficasComputacionales3D\\EngineXd\\Sandbox\\source\\main.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
       "RelativeMoniker": "D:0:0:{405D31F7-A84C-4979-A63A-C6648D52BFB1}|Sandbox\\Sandbox.vcxproj|solutionrelative:Sandbox\\source\\main.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
     }
@@ -19,12 +23,25 @@
             {
               "$type": "Document",
               "DocumentIndex": 0,
+              "Title": "Engine.cpp",
+              "DocumentMoniker": "D:\\Repos\\GraficasComputacionales3D\\EngineXd\\Grafica3DEngine\\source\\Engine.cpp",
+              "RelativeDocumentMoniker": "Grafica3DEngine\\source\\Engine.cpp",
+              "ToolTip": "D:\\Repos\\GraficasComputacionales3D\\EngineXd\\Grafica3DEngine\\source\\Engine.cpp",
+              "RelativeToolTip": "Grafica3DEngine\\source\\Engine.cpp",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAQAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000677|",
+              "WhenOpened": "2026-09-02T13:16:49.302Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
               "Title": "main.cpp",
               "DocumentMoniker": "D:\\Repos\\GraficasComputacionales3D\\EngineXd\\Sandbox\\source\\main.cpp",
               "RelativeDocumentMoniker": "Sandbox\\source\\main.cpp",
               "ToolTip": "D:\\Repos\\GraficasComputacionales3D\\EngineXd\\Sandbox\\source\\main.cpp",
               "RelativeToolTip": "Sandbox\\source\\main.cpp",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "ViewState": "AgIAABgAAAAAAAAAAADwvygAAAABAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000677|",
               "WhenOpened": "2026-08-31T14:33:20.372Z",
               "EditorCaption": ""

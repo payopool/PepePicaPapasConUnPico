@@ -3,6 +3,7 @@
     <Platform Name="x64" />
     <Platform Name="x86" />
   </Configurations>
-  <Project Path="Grafica3DEngine/Grafica3DEngine.vcxproj" />
-  <Project Path="Sandbox/Sandbox.vcxproj" />
+  <Project Path="Grafica3DEngine/Grafica3DEngine.vcxproj" Id="b8bb08c6-72f1-4a63-a0dd-44002e8ee8aa" />
+  <Project Path="Sandbox/Sandbox.vcxproj" Id="405d31f7-a84c-4979-a63a-c6648d52bfb1" />
+  <Project Path="ThirdParties/DirectXTK/DirectXTK_Desktop_2022.vcxproj" Id="e0b52ae7-e160-4d32-bf3f-910b785e5a8e" />
 </Solution>

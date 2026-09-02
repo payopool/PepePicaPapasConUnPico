@@ -13,5 +13,21 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="Archivos de encabezado\Engine">
+      <UniqueIdentifier>{587e001f-d058-482c-b49e-a9be99274dbd}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="source\Engine.cpp">
+      <Filter>Archivos de recursos</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="include\Api.h">
+      <Filter>Archivos de encabezado\Engine</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Engine.h">
+      <Filter>Archivos de encabezado\Engine</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
