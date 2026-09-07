@@ -30,4 +30,9 @@
       <Filter>Archivos de encabezado\Engine</Filter>
     </ClInclude>
   </ItemGroup>
+  <ItemGroup>
+    <FxCompile Include="..\bin\shaders\Triangule.hlsl">
+      <Filter>Archivos de recursos</Filter>
+    </FxCompile>
+  </ItemGroup>
 </Project>
