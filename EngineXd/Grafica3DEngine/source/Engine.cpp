@@ -7,6 +7,7 @@
 #include <cstddef>
 #include <cstdint>
 #include <new>
+#include <sstream>
 
 // MACROS
 #define SAFE_RELEASE(x) if(x != nullptr) x->Release(); x = nullptr;

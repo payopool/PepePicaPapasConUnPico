@@ -198,6 +198,9 @@
     <ClInclude Include="include\Engine\Api.h" />
     <ClInclude Include="include\Engine\Engine.h" />
   </ItemGroup>
+  <ItemGroup>
+    <FxCompile Include="Triangle.hlsl" />
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>
