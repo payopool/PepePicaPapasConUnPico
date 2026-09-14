@@ -10,7 +10,7 @@
 #include <sstream>
 
 // MACROS
-#define SAFE_RELEASE(x) if(x != nullptr) x->Release(); x = nullptr;
+#define SAFE_RELEASE(x) if(x != nullptr) { x->Release(); x = nullptr; }
 
 #define MESSAGE( classObj, method, state )   \
 {                                            \
@@ -19,16 +19,16 @@
    OutputDebugStringW( os_.str().c_str() );  \
 }
 
-#define ERROR(classObj, method, errorMSG)                     \
-{                                                             \
-    try {                                                     \
-        std::wostringstream os_;                              \
-        os_ << L"ERROR : " << classObj << L"::" << method     \
-            << L" : " << errorMSG << L"\n";                   \
-        OutputDebugStringW(os_.str().c_str());                \
-    } catch (...) {                                           \
+#define ERROR_MSG(classObj, method, errorMSG)               \
+{                                                           \
+    try {                                                   \
+        std::wostringstream os_;                            \
+        os_ << L"ERROR : " << classObj << L"::" << method   \
+            << L" : " << errorMSG << L"\n";                 \
+        OutputDebugStringW(os_.str().c_str());              \
+    } catch (...) {                                         \
         OutputDebugStringW(L"Failed to log error message.\n");\
-    }                                                         \
+    }                                                       \
 }
 
 template<typename T>
@@ -41,8 +41,8 @@ void SafeRelease(T*& object) noexcept
   }
 }
 
-struct
-  Engine::Implementation {
+struct Engine::Implementation
+{
   struct Vertex
   {
     float position[3];
@@ -64,9 +64,9 @@ struct
   ID3D11InputLayout* inputLayout = nullptr;
   ID3D11Buffer* vertexBuffer = nullptr;
 
-  static bool
-    CompileShader(const wchar_t* filename, const char* entryPoint,
-      const char* shaderModel, ID3DBlob** shaderBlob) noexcept {
+  static bool CompileShader(const wchar_t* filename, const char* entryPoint,
+    const char* shaderModel, ID3DBlob** shaderBlob) noexcept
+  {
     if (!filename || !entryPoint || !shaderModel || !shaderBlob) {
       return false;
     }
@@ -137,7 +137,6 @@ struct
     width = 0;
     height = 0;
   }
-
 };
 
 Engine::Engine() noexcept
@@ -170,43 +169,26 @@ bool Engine::Initialize(
 
   Implementation& engine = *m_implementation;
 
-  // Permite reinicializar la instancia de forma segura.
   engine.ReleaseResources();
 
   engine.window = static_cast<HWND>(nativeWindow);
   engine.width = width;
   engine.height = height;
+
   DXGI_SWAP_CHAIN_DESC swapChainDescription{};
 
   swapChainDescription.BufferCount = 2;
-
-  swapChainDescription.BufferDesc.Width =
-    engine.width;
-
-  swapChainDescription.BufferDesc.Height =
-    engine.height;
-
-  swapChainDescription.BufferDesc.Format =
-    DXGI_FORMAT_R8G8B8A8_UNORM;
-
-  swapChainDescription.BufferDesc.RefreshRate.Numerator =
-    60;
-
-  swapChainDescription.BufferDesc.RefreshRate.Denominator =
-    1;
-
-  swapChainDescription.BufferUsage =
-    DXGI_USAGE_RENDER_TARGET_OUTPUT;
-
-  swapChainDescription.OutputWindow =
-    engine.window;
-
+  swapChainDescription.BufferDesc.Width = engine.width;
+  swapChainDescription.BufferDesc.Height = engine.height;
+  swapChainDescription.BufferDesc.Format = DXGI_FORMAT_R8G8B8A8_UNORM;
+  swapChainDescription.BufferDesc.RefreshRate.Numerator = 60;
+  swapChainDescription.BufferDesc.RefreshRate.Denominator = 1;
+  swapChainDescription.BufferUsage = DXGI_USAGE_RENDER_TARGET_OUTPUT;
+  swapChainDescription.OutputWindow = engine.window;
   swapChainDescription.SampleDesc.Count = 1;
-  swapChainDescription.SampleDesc.Quality = 0; // Antialising
+  swapChainDescription.SampleDesc.Quality = 0;
   swapChainDescription.Windowed = TRUE;
-
-  swapChainDescription.SwapEffect =
-    DXGI_SWAP_EFFECT_DISCARD;
+  swapChainDescription.SwapEffect = DXGI_SWAP_EFFECT_DISCARD;
 
   constexpr D3D_FEATURE_LEVEL featureLevels[]
   {
@@ -230,8 +212,6 @@ bool Engine::Initialize(
     &engine.context
   );
 
-  // Si falla la GPU física, utiliza el rasterizador
-  // por software de Windows.
   if (FAILED(result))
   {
     SafeRelease(engine.swapChain);
@@ -292,13 +272,8 @@ bool Engine::Initialize(
 
   viewport.TopLeftX = 0.0f;
   viewport.TopLeftY = 0.0f;
-
-  viewport.Width =
-    static_cast<float>(engine.width);
-
-  viewport.Height =
-    static_cast<float>(engine.height);
-
+  viewport.Width = static_cast<float>(engine.width);
+  viewport.Height = static_cast<float>(engine.height);
   viewport.MinDepth = 0.0f;
   viewport.MaxDepth = 1.0f;
 
@@ -311,7 +286,7 @@ bool Engine::Initialize(
   ID3DBlob* pixelShaderBlob = nullptr;
 
   if (!Implementation::CompileShader(
-    L"shaders\\Triangle.hlsl",
+    L"shaders/Triangle.hlsl",
     "VSMain",
     "vs_5_0",
     &vertexShaderBlob))
@@ -321,7 +296,7 @@ bool Engine::Initialize(
   }
 
   if (!Implementation::CompileShader(
-    L"shaders\\Triangle.hlsl",
+    L"shaders/Triangle.hlsl",
     "PSMain",
     "ps_5_0",
     &pixelShaderBlob))
@@ -363,7 +338,7 @@ bool Engine::Initialize(
 
   constexpr D3D11_INPUT_ELEMENT_DESC inputElements[]{
       { "POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, static_cast<UINT>(offsetof(Implementation::Vertex, position)), D3D11_INPUT_PER_VERTEX_DATA, 0 },
-      { "COLOR", 0, DXGI_FORMAT_R32G32B32A32_FLOAT, 0, static_cast<UINT>(offsetof(Implementation::Vertex, color)),D3D11_INPUT_PER_VERTEX_DATA, 0}
+      { "COLOR", 0, DXGI_FORMAT_R32G32B32A32_FLOAT, 0, static_cast<UINT>(offsetof(Implementation::Vertex, color)), D3D11_INPUT_PER_VERTEX_DATA, 0 }
   };
 
   result = engine.device->CreateInputLayout(
@@ -385,31 +360,16 @@ bool Engine::Initialize(
 
   constexpr Implementation::Vertex vertices[]
   {
-      {
-          { 0.0f, 0.6f, 0.0f },
-          { 1.0f, 0.0f, 0.0f, 1.0f }
-      },
-      {
-          { 0.6f, -0.6f, 0.0f },
-          { 0.0f, 1.0f, 0.0f, 1.0f }
-      },
-      {
-          { -0.6f, -0.6f, 0.0f },
-          { 0.0f, 0.3f, 1.0f, 1.0f }
-      }
+      { {  0.0f,  0.6f, 0.0f }, { 1.0f, 0.0f, 0.0f, 1.0f } },
+      { {  0.6f, -0.6f, 0.0f }, { 0.0f, 1.0f, 0.0f, 1.0f } },
+      { { -0.6f, -0.6f, 0.0f }, { 0.0f, 0.3f, 1.0f, 1.0f } }
   };
 
   D3D11_BUFFER_DESC vertexBufferDescription{};
 
-  vertexBufferDescription.ByteWidth =
-    static_cast<UINT>(sizeof(vertices));
-
-  vertexBufferDescription.Usage =
-    D3D11_USAGE_IMMUTABLE;
-
-  vertexBufferDescription.BindFlags =
-    D3D11_BIND_VERTEX_BUFFER;
-
+  vertexBufferDescription.ByteWidth = static_cast<UINT>(sizeof(vertices));
+  vertexBufferDescription.Usage = D3D11_USAGE_IMMUTABLE;
+  vertexBufferDescription.BindFlags = D3D11_BIND_VERTEX_BUFFER;
   vertexBufferDescription.CPUAccessFlags = 0;
   vertexBufferDescription.MiscFlags = 0;
   vertexBufferDescription.StructureByteStride = 0;
@@ -469,9 +429,7 @@ void Engine::Render() noexcept
     clearColor
   );
 
-  constexpr UINT stride =
-    sizeof(Implementation::Vertex);
-
+  constexpr UINT stride = sizeof(Implementation::Vertex);
   constexpr UINT offset = 0;
 
   engine.context->IASetVertexBuffers(

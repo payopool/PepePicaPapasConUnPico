@@ -1,35 +1,18 @@
 #pragma once
 
-#include "API.h"
-
 #include <cstdint>
 
-class ENGINE_API Engine final
+class Engine
 {
 public:
-
   Engine() noexcept;
   ~Engine() noexcept;
 
-  Engine(const Engine&) = delete;
-  Engine& operator=(const Engine&) = delete;
-
-  Engine(Engine&&) = delete;
-  Engine& operator=(Engine&&) = delete;
-
-  bool Initialize(
-    void* nativeWindow,
-    std::uint32_t width,
-    std::uint32_t height
-  ) noexcept;
-
+  bool Initialize(void* nativeWindow, std::uint32_t width, std::uint32_t height) noexcept;
   void Render() noexcept;
-
   void Shutdown() noexcept;
 
 private:
-
   struct Implementation;
-
-  Implementation* m_implementation = nullptr;
+  Implementation* m_implementation;
 };
