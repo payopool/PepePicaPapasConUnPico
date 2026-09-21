@@ -1,5 +1,5 @@
 #include <windows.h>
-#include <cstdint> // <-- Esto define uint32_t
+#include <cstdint> 
 #include <Engine/Engine.h>
 
 // Declaración del procedimiento de la ventana
@@ -42,7 +42,7 @@ int APIENTRY wWinMain(
   HWND hwnd = CreateWindowEx(
     0,
     CLASS_NAME,
-    L"EngineXd - Triángulo DirectX 11",
+    L"EngineXd - OOOH yea ._.",
     WS_OVERLAPPEDWINDOW,
     CW_USEDEFAULT, CW_USEDEFAULT,
     width, height,
