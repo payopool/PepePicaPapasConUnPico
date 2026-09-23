@@ -1,18 +1,32 @@
+/**
+ * @file Window.cpp
+ * @brief Implementación de la clase Window para la creación y gestión de la ventana Win32.
+ */
 
 #include "Window.h"
 
-Window::~Window()
-{
+/**
+ * @brief Destruye la instancia de la ventana invocando internamente a Destroy().
+ */
+Window::~Window(){
 	Destroy();
 }
 
+/**
+ * @brief Registra la clase de ventana y crea la ventana nativa de Win32 con las dimensiones especificadas.
+ * 
+ * @param Instance Instancia actual de la aplicación Win32.
+ * @param title Título que figurará en la barra superior de la ventana.
+ * @param clientWidth Ancho deseado para el área cliente en píxeles.
+ * @param clientHeight Alto deseado para el área cliente en píxeles.
+ * @return true Si el registro y la creación de la ventana fueron exitosos.
+ * @return false Si alguno de los parámetros es inválido o falla la API de Windows.
+ */
 bool Window::Create(
 	HINSTANCE Instance,
 	const wchar_t* title,
 	UINT clientWidth,
-	UINT clientHeight
-) noexcept
-{
+	UINT clientHeight) noexcept{
 	if (m_handle ||
 		!Instance ||
 		!title ||
@@ -96,8 +110,12 @@ bool Window::Create(
 	return true;
 }
 
-void Window::Show(int showCommand) noexcept
-{
+/**
+ * @brief Muestra y actualiza el estado visual de la ventana en pantalla.
+ * 
+ * @param showCommand Bandera de visibilidad (ej. SW_SHOW, SW_MINIMIZE).
+ */
+void Window::Show(int showCommand) noexcept{
 	if (m_handle)
 	{
 		ShowWindow(m_handle, showCommand);
@@ -105,8 +123,13 @@ void Window::Show(int showCommand) noexcept
 	}
 }
 
-bool Window::ProcessMessages() noexcept
-{
+/**
+ * @brief Extrae y despacha los mensajes pendientes en la cola del sistema de Windows.
+ * 
+ * @return true Si la ejecución de la aplicación debe continuar.
+ * @return false Si se interceptó el mensaje WM_QUIT para cerrar la aplicación.
+ */
+bool Window::ProcessMessages() noexcept{
 	MSG message{};
 
 	while (PeekMessageW(
@@ -128,13 +151,20 @@ bool Window::ProcessMessages() noexcept
 	return true;
 }
 
-bool Window::IsMinimized() const noexcept
-{
+/**
+ * @brief Comprueba si la ventana se encuentra actualmente minimizada.
+ * 
+ * @return true Si la ventana existe y está minimizada (iconizada).
+ * @return false En caso contrario.
+ */
+bool Window::IsMinimized() const noexcept{
 	return m_handle && IsIconic(m_handle);
 }
 
-void Window::Destroy() noexcept
-{
+/**
+ * @brief Libera el identificador de la ventana y desregistra la clase de ventana de Windows.
+ */
+void Window::Destroy() noexcept{
 	if (m_handle)
 	{
 		DestroyWindow(m_handle);
@@ -153,13 +183,20 @@ void Window::Destroy() noexcept
 	}
 }
 
+/**
+ * @brief Procedimiento de ventana encargado de gestionar los mensajes enviados por el sistema operativo.
+ * 
+ * @param handle Identificador de la ventana receptora del mensaje.
+ * @param message Código identificador del evento o mensaje.
+ * @param wParam Primer parámetro contextual del mensaje.
+ * @param lParam Segundo parámetro contextual del mensaje (puede contener el puntero `this` en WM_NCCREATE).
+ * @return LRESULT Resultado del procesamiento del mensaje.
+ */
 LRESULT CALLBACK Window::WindowProc(
 	HWND handle,
 	UINT message,
 	WPARAM wParam,
-	LPARAM lParam
-)
-{
+	LPARAM lParam){
 	Window* window = nullptr;
 
 	if (message == WM_NCCREATE)

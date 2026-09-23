@@ -3,31 +3,28 @@
   "WorkspaceRootPath": "D:\\Repos\\GraficasComputacionales3D\\EngineXd\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{405D31F7-A84C-4979-A63A-C6648D52BFB1}|Sandbox\\Sandbox.vcxproj|D:\\Repos\\GraficasComputacionales3D\\EngineXd\\Sandbox\\source\\main.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
-      "RelativeMoniker": "D:0:0:{405D31F7-A84C-4979-A63A-C6648D52BFB1}|Sandbox\\Sandbox.vcxproj|solutionrelative:Sandbox\\source\\main.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{405D31F7-A84C-4979-A63A-C6648D52BFB1}|Sandbox\\Sandbox.vcxproj|D:\\Repos\\GraficasComputacionales3D\\EngineXd\\Sandbox\\source\\Window.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
-      "RelativeMoniker": "D:0:0:{405D31F7-A84C-4979-A63A-C6648D52BFB1}|Sandbox\\Sandbox.vcxproj|solutionrelative:Sandbox\\source\\Window.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{405D31F7-A84C-4979-A63A-C6648D52BFB1}|Sandbox\\Sandbox.vcxproj|D:\\Repos\\GraficasComputacionales3D\\EngineXd\\Sandbox\\include\\Window.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
-      "RelativeMoniker": "D:0:0:{405D31F7-A84C-4979-A63A-C6648D52BFB1}|Sandbox\\Sandbox.vcxproj|solutionrelative:Sandbox\\include\\Window.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{B8BB08C6-72F1-4A63-A0DD-44002E8EE8AA}|Grafica3DEngine\\Grafica3DEngine.vcxproj|D:\\Repos\\GraficasComputacionales3D\\EngineXd\\Grafica3DEngine\\source\\Engine.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
-      "RelativeMoniker": "D:0:0:{B8BB08C6-72F1-4A63-A0DD-44002E8EE8AA}|Grafica3DEngine\\Grafica3DEngine.vcxproj|solutionrelative:Grafica3DEngine\\source\\Engine.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
+      "AbsoluteMoniker": "D:0:0:{B8BB08C6-72F1-4A63-A0DD-44002E8EE8AA}|Grafica3DEngine\\Grafica3DEngine.vcxproj|D:\\Repos\\GraficasComputacionales3D\\EngineXd\\Grafica3DEngine\\include\\Engine\\Api.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
+      "RelativeMoniker": "D:0:0:{B8BB08C6-72F1-4A63-A0DD-44002E8EE8AA}|Grafica3DEngine\\Grafica3DEngine.vcxproj|solutionrelative:Grafica3DEngine\\include\\Engine\\Api.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{B8BB08C6-72F1-4A63-A0DD-44002E8EE8AA}|Grafica3DEngine\\Grafica3DEngine.vcxproj|D:\\Repos\\GraficasComputacionales3D\\EngineXd\\Grafica3DEngine\\include\\Engine\\Engine.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
       "RelativeMoniker": "D:0:0:{B8BB08C6-72F1-4A63-A0DD-44002E8EE8AA}|Grafica3DEngine\\Grafica3DEngine.vcxproj|solutionrelative:Grafica3DEngine\\include\\Engine\\Engine.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Program Files\\Microsoft Visual Studio\\18\\Community\\MSBuild\\Microsoft\\VC\\v180\\Microsoft.CppCommon.targets||{FA3CD31E-987B-443A-9B81-186104E8DAC1}|"
+      "AbsoluteMoniker": "D:0:0:{B8BB08C6-72F1-4A63-A0DD-44002E8EE8AA}|Grafica3DEngine\\Grafica3DEngine.vcxproj|D:\\Repos\\GraficasComputacionales3D\\EngineXd\\Grafica3DEngine\\source\\Engine.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
+      "RelativeMoniker": "D:0:0:{B8BB08C6-72F1-4A63-A0DD-44002E8EE8AA}|Grafica3DEngine\\Grafica3DEngine.vcxproj|solutionrelative:Grafica3DEngine\\source\\Engine.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{B8BB08C6-72F1-4A63-A0DD-44002E8EE8AA}|Grafica3DEngine\\Grafica3DEngine.vcxproj|D:\\Repos\\GraficasComputacionales3D\\EngineXd\\Grafica3DEngine\\include\\Engine\\Api.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
-      "RelativeMoniker": "D:0:0:{B8BB08C6-72F1-4A63-A0DD-44002E8EE8AA}|Grafica3DEngine\\Grafica3DEngine.vcxproj|solutionrelative:Grafica3DEngine\\include\\Engine\\Api.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
+      "AbsoluteMoniker": "D:0:0:{405D31F7-A84C-4979-A63A-C6648D52BFB1}|Sandbox\\Sandbox.vcxproj|D:\\Repos\\GraficasComputacionales3D\\EngineXd\\Sandbox\\include\\Window.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
+      "RelativeMoniker": "D:0:0:{405D31F7-A84C-4979-A63A-C6648D52BFB1}|Sandbox\\Sandbox.vcxproj|solutionrelative:Sandbox\\include\\Window.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{405D31F7-A84C-4979-A63A-C6648D52BFB1}|Sandbox\\Sandbox.vcxproj|D:\\Repos\\GraficasComputacionales3D\\EngineXd\\Sandbox\\source\\Window.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
+      "RelativeMoniker": "D:0:0:{405D31F7-A84C-4979-A63A-C6648D52BFB1}|Sandbox\\Sandbox.vcxproj|solutionrelative:Sandbox\\source\\Window.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{405D31F7-A84C-4979-A63A-C6648D52BFB1}|Sandbox\\Sandbox.vcxproj|D:\\Repos\\GraficasComputacionales3D\\EngineXd\\Sandbox\\source\\main.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
+      "RelativeMoniker": "D:0:0:{405D31F7-A84C-4979-A63A-C6648D52BFB1}|Sandbox\\Sandbox.vcxproj|solutionrelative:Sandbox\\source\\main.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
     }
   ],
   "DocumentGroupContainers": [
@@ -37,17 +34,17 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 0,
+          "SelectedChildIndex": 5,
           "Children": [
             {
               "$type": "Document",
-              "DocumentIndex": 0,
+              "DocumentIndex": 5,
               "Title": "main.cpp",
               "DocumentMoniker": "D:\\Repos\\GraficasComputacionales3D\\EngineXd\\Sandbox\\source\\main.cpp",
               "RelativeDocumentMoniker": "Sandbox\\source\\main.cpp",
               "ToolTip": "D:\\Repos\\GraficasComputacionales3D\\EngineXd\\Sandbox\\source\\main.cpp",
               "RelativeToolTip": "Sandbox\\source\\main.cpp",
-              "ViewState": "AgIAABsAAAAAAAAAAAAAADAAAAAMAAAAAAAAAA==",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAG0AAAABAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000677|",
               "WhenOpened": "2026-09-14T01:39:34.525Z",
               "IsPinned": true,
@@ -55,77 +52,68 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 1,
+              "DocumentIndex": 4,
               "Title": "Window.cpp",
               "DocumentMoniker": "D:\\Repos\\GraficasComputacionales3D\\EngineXd\\Sandbox\\source\\Window.cpp",
               "RelativeDocumentMoniker": "Sandbox\\source\\Window.cpp",
               "ToolTip": "D:\\Repos\\GraficasComputacionales3D\\EngineXd\\Sandbox\\source\\Window.cpp",
               "RelativeToolTip": "Sandbox\\source\\Window.cpp",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAPoAAAABAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000677|",
               "WhenOpened": "2026-09-21T13:49:24.673Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 2,
+              "DocumentIndex": 3,
               "Title": "Window.h",
               "DocumentMoniker": "D:\\Repos\\GraficasComputacionales3D\\EngineXd\\Sandbox\\include\\Window.h",
               "RelativeDocumentMoniker": "Sandbox\\include\\Window.h",
               "ToolTip": "D:\\Repos\\GraficasComputacionales3D\\EngineXd\\Sandbox\\include\\Window.h",
               "RelativeToolTip": "Sandbox\\include\\Window.h",
-              "ViewState": "AgIAADMAAAAAAAAAAAAAADMAAAAAAAAAAAAAAA==",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAoAAAAJAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000680|",
               "WhenOpened": "2026-09-21T13:25:21.542Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 3,
+              "DocumentIndex": 2,
               "Title": "Engine.cpp",
               "DocumentMoniker": "D:\\Repos\\GraficasComputacionales3D\\EngineXd\\Grafica3DEngine\\source\\Engine.cpp",
               "RelativeDocumentMoniker": "Grafica3DEngine\\source\\Engine.cpp",
               "ToolTip": "D:\\Repos\\GraficasComputacionales3D\\EngineXd\\Grafica3DEngine\\source\\Engine.cpp",
               "RelativeToolTip": "Grafica3DEngine\\source\\Engine.cpp",
-              "ViewState": "AgIAAHQCAAAAAAAAAAAUwHgCAAASAAAAAAAAAA==",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAADAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000677|",
               "WhenOpened": "2026-09-14T01:39:27.305Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 4,
+              "DocumentIndex": 1,
               "Title": "Engine.h",
               "DocumentMoniker": "D:\\Repos\\GraficasComputacionales3D\\EngineXd\\Grafica3DEngine\\include\\Engine\\Engine.h",
               "RelativeDocumentMoniker": "Grafica3DEngine\\include\\Engine\\Engine.h",
               "ToolTip": "D:\\Repos\\GraficasComputacionales3D\\EngineXd\\Grafica3DEngine\\include\\Engine\\Engine.h",
               "RelativeToolTip": "Grafica3DEngine\\include\\Engine\\Engine.h",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAgAAAACAAAAAAAAAA==",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAADQAAAACAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000680|",
               "WhenOpened": "2026-09-14T01:39:22.629Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 5,
-              "Title": "Microsoft.CppCommon.targets",
-              "DocumentMoniker": "C:\\Program Files\\Microsoft Visual Studio\\18\\Community\\MSBuild\\Microsoft\\VC\\v180\\Microsoft.CppCommon.targets",
-              "ToolTip": "C:\\Program Files\\Microsoft Visual Studio\\18\\Community\\MSBuild\\Microsoft\\VC\\v180\\Microsoft.CppCommon.targets",
-              "ViewState": "AgIAAGAHAAAAAAAAAAAIwG0HAAAEAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003801|",
-              "WhenOpened": "2026-09-14T02:03:39.388Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 6,
+              "DocumentIndex": 0,
               "Title": "Api.h",
               "DocumentMoniker": "D:\\Repos\\GraficasComputacionales3D\\EngineXd\\Grafica3DEngine\\include\\Engine\\Api.h",
               "RelativeDocumentMoniker": "Grafica3DEngine\\include\\Engine\\Api.h",
               "ToolTip": "D:\\Repos\\GraficasComputacionales3D\\EngineXd\\Grafica3DEngine\\include\\Engine\\Api.h",
               "RelativeToolTip": "Grafica3DEngine\\include\\Engine\\Api.h",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "ViewState": "AgIAAAYAAAAAAAAAAAAkwBsAAAAGAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000680|",
-              "WhenOpened": "2026-09-14T01:39:21.196Z"
+              "WhenOpened": "2026-09-14T01:39:21.196Z",
+              "EditorCaption": ""
             }
           ]
         }

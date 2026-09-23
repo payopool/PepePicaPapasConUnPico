@@ -1,3 +1,8 @@
+/**
+ * @file Engine.cpp
+ * @brief Implementación del motor gráfico basada en DirectX 11 usando el patrón PImpl.
+ */
+
 #include <Engine/Engine.h>
 
 #include <Windows.h>
@@ -16,23 +21,30 @@
 // MACROS
 // ============================================================
 
+/**
+ * @def MESSAGE(classObj, method, state)
+ * @brief Macro para registrar mensajes informativos de creación de recursos en la salida de depuración.
+ */
 #define MESSAGE(classObj, method, state)                         \
 {                                                                \
     std::wostringstream os_;                                     \
-    os_ << classObj << L"::" << method                          \
-        << L" : [CREATION OF RESOURCE : " << state << L"]\n";   \
+    os_ << classObj << L"::" << method                           \
+        << L" : [CREATION OF RESOURCE : " << state << L"]\n";    \
     OutputDebugStringW(os_.str().c_str());                       \
 }
 
-
+/**
+ * @def ERROR_MSG(classObj, method, errorMSG)
+ * @brief Macro para registrar mensajes de error detallados de forma segura en la salida de depuración.
+ */
 #define ERROR_MSG(classObj, method, errorMSG)                    \
 {                                                                \
-    try                                                        \
+    try                                                          \
     {                                                            \
         std::wostringstream os_;                                 \
-        os_ << L"ERROR : " << classObj << L"::" << method       \
-            << L" : " << errorMSG << L"\n";                     \
-        OutputDebugStringW(os_.str().c_str());                  \
+        os_ << L"ERROR : " << classObj << L"::" << method        \
+            << L" : " << errorMSG << L"\n";                      \
+        OutputDebugStringW(os_.str().c_str());                   \
     }                                                            \
     catch (...)                                                  \
     {                                                            \
@@ -45,6 +57,12 @@
 // SAFE RELEASE
 // ============================================================
 
+/**
+ * @brief Libera de forma segura un objeto COM y establece su puntero en nullptr.
+ * 
+ * @tparam T Tipo del objeto COM a liberar.
+ * @param object Referencia al puntero del objeto.
+ */
 template<typename T>
 void SafeRelease(T*& object) noexcept
 {
@@ -60,101 +78,65 @@ void SafeRelease(T*& object) noexcept
 // ENGINE IMPLEMENTATION
 // ============================================================
 
+/**
+ * @struct Engine::Implementation
+ * @brief Estructura interna que oculta los detalles de implementación (patrón PImpl) del motor gráfico DirectX 11.
+ */
 struct Engine::Implementation
 {
-  // ========================================================
-  // VERTEX
-  // ========================================================
-
+  /**
+   * @struct Vertex
+   * @brief Define la estructura de un vértice individual con posición tricolor/coordenadas y color.
+   */
   struct Vertex
   {
-    float position[3];
-    float color[4];
+    float position[3]; ///< Coordenadas espaciales (X, Y, Z).
+    float color[4];    ///< Componentes de color RGBA.
   };
 
-
-  // ========================================================
-  // TRANSFORM BUFFER
-  // ========================================================
-
+  /**
+   * @struct TransformBuffer
+   * @brief Estructura alineada a 16 bytes para la matriz de transformación enviada al sombreador de vértices.
+   */
   struct alignas(16) TransformBuffer
   {
-    DirectX::XMFLOAT4X4 worldViewProjection;
+    DirectX::XMFLOAT4X4 worldViewProjection; ///< Matriz combinada Mundo-Vista-Proyección.
   };
 
+  HWND window = nullptr;           ///< Identificador de la ventana nativa de Windows.
+  std::uint32_t width = 0;         ///< Ancho actual del área de renderizado.
+  std::uint32_t height = 0;        ///< Alto actual del área de renderizado.
 
-  // ========================================================
-  // WINDOW
-  // ========================================================
+  ID3D11Device* device = nullptr;                   ///< Dispositivo principal de DirectX 11.
+  ID3D11DeviceContext* context = nullptr;           ///< Contexto de dispositivo para comandos de renderizado.
+  IDXGISwapChain* swapChain = nullptr;              ///< Cadena de intercambio para doble búfer.
+  ID3D11RenderTargetView* renderTarget = nullptr;   ///< Vista del búfer de renderizado (Back Buffer).
 
-  HWND window = nullptr;
+  ID3D11Texture2D* depthStencilBuffer = nullptr;        ///< Textura para el búfer de profundidad y esténcil.
+  ID3D11DepthStencilView* depthStencilView = nullptr;   ///< Vista del búfer de profundidad y esténcil.
 
-  std::uint32_t width = 0;
-  std::uint32_t height = 0;
+  ID3D11Buffer* vertexBuffer = nullptr;     ///< Búfer de vértices de la geometría.
+  ID3D11Buffer* indexBuffer = nullptr;      ///< Búfer de índices para la malla.
+  ID3D11Buffer* transformBuffer = nullptr;  ///< Búfer constante para matrices de transformación.
 
+  ID3D11RasterizerState* rasterizerState = nullptr;   ///< Estado del rasterizador (culling, wireframe, etc.).
 
-  // ========================================================
-  // DIRECTX
-  // ========================================================
+  ID3D11VertexShader* vertexShader = nullptr;   ///< Sombreador de vértices compilado.
+  ID3D11PixelShader* pixelShader = nullptr;     ///< Sombreador de píxeles compilado.
+  ID3D11InputLayout* inputLayout = nullptr;     ///< Diseño de entrada de los vértices para la tarjeta gráfica.
 
-  ID3D11Device* device = nullptr;
+  std::chrono::steady_clock::time_point startTime{}; ///< Registro del tiempo inicial para animaciones basadas en tiempo.
 
-  ID3D11DeviceContext* context = nullptr;
-
-  IDXGISwapChain* swapChain = nullptr;
-
-  ID3D11RenderTargetView* renderTarget = nullptr;
-
-
-  // ========================================================
-  // DEPTH / STENCIL
-  // ========================================================
-
-  ID3D11Texture2D* depthStencilBuffer = nullptr;
-
-  ID3D11DepthStencilView* depthStencilView = nullptr;
-
-
-  // ========================================================
-  // BUFFERS
-  // ========================================================
-
-  ID3D11Buffer* vertexBuffer = nullptr;
-
-  ID3D11Buffer* indexBuffer = nullptr;
-
-  ID3D11Buffer* transformBuffer = nullptr;
-
-
-  // ========================================================
-  // RASTERIZER
-  // ========================================================
-
-  ID3D11RasterizerState* rasterizerState = nullptr;
-
-
-  // ========================================================
-  // SHADERS
-  // ========================================================
-
-  ID3D11VertexShader* vertexShader = nullptr;
-
-  ID3D11PixelShader* pixelShader = nullptr;
-
-  ID3D11InputLayout* inputLayout = nullptr;
-
-
-  // ========================================================
-  // TIMER
-  // ========================================================
-
-  std::chrono::steady_clock::time_point startTime{};
-
-
-  // ========================================================
-  // SHADER COMPILER
-  // ========================================================
-
+  /**
+   * @brief Compila un archivo de sombreador (HLSL) en un blob utilizable por DirectX.
+   * 
+ * @param filename Ruta del archivo fuente HLSL.
+ * @param entryPoint Función de entrada en el shader (ej. "VSMain" o "PSMain").
+ * @param shaderModel Modelo de sombreador objetivo (ej. "vs_5_0", "ps_5_0").
+ * @param shaderBlob Puntero donde se almacenará el código binario compilado resultante.
+ * @return true Si la compilación es exitosa.
+ * @return false Si ocurre algún error de compilación.
+ */
   static bool CompileShader(
     const wchar_t* filename,
     const char* entryPoint,
@@ -170,31 +152,18 @@ struct Engine::Implementation
       return false;
     }
 
-
     *shaderBlob = nullptr;
 
-
-    UINT compileFlags =
-      D3DCOMPILE_ENABLE_STRICTNESS;
-
+    UINT compileFlags = D3DCOMPILE_ENABLE_STRICTNESS;
 
 #ifdef _DEBUG
-
     compileFlags |= D3DCOMPILE_DEBUG;
-
-    compileFlags |=
-      D3DCOMPILE_SKIP_OPTIMIZATION;
-
+    compileFlags |= D3DCOMPILE_SKIP_OPTIMIZATION;
 #else
-
-    compileFlags |=
-      D3DCOMPILE_OPTIMIZATION_LEVEL3;
-
+    compileFlags |= D3DCOMPILE_OPTIMIZATION_LEVEL3;
 #endif
 
-
     ID3DBlob* errors = nullptr;
-
 
     const HRESULT result =
       D3DCompileFromFile(
@@ -209,7 +178,6 @@ struct Engine::Implementation
         &errors
       );
 
-
     if (errors)
     {
       OutputDebugStringA(
@@ -221,7 +189,6 @@ struct Engine::Implementation
       SafeRelease(errors);
     }
 
-
     if (FAILED(result))
     {
       SafeRelease(*shaderBlob);
@@ -229,56 +196,36 @@ struct Engine::Implementation
       return false;
     }
 
-
     return true;
   }
 
-
-  // ========================================================
-  // RELEASE RESOURCES
-  // ========================================================
-
+  /**
+   * @brief Libera todos los recursos gráficos y limpia el estado del motor.
+   */
   void ReleaseResources() noexcept
   {
     if (context)
     {
       context->ClearState();
-
       context->Flush();
     }
 
-
     SafeRelease(transformBuffer);
-
     SafeRelease(rasterizerState);
-
     SafeRelease(indexBuffer);
-
     SafeRelease(vertexBuffer);
-
     SafeRelease(inputLayout);
-
     SafeRelease(pixelShader);
-
     SafeRelease(vertexShader);
-
     SafeRelease(depthStencilView);
-
     SafeRelease(depthStencilBuffer);
-
     SafeRelease(renderTarget);
-
     SafeRelease(swapChain);
-
     SafeRelease(context);
-
     SafeRelease(device);
 
-
     window = nullptr;
-
     width = 0;
-
     height = 0;
   }
 };
@@ -288,6 +235,9 @@ struct Engine::Implementation
 // CONSTRUCTOR
 // ============================================================
 
+/**
+ * @brief Construye una nueva instancia del motor e inicializa su estructura privada.
+ */
 Engine::Engine() noexcept
   : m_implementation(
     new (std::nothrow) Implementation{}
@@ -299,6 +249,9 @@ Engine::Engine() noexcept
 // DESTRUCTOR
 // ============================================================
 
+/**
+ * @brief Destruye la instancia del motor asegurando la liberación de recursos.
+ */
 Engine::~Engine() noexcept
 {
   Shutdown();
@@ -313,6 +266,15 @@ Engine::~Engine() noexcept
 // INITIALIZE
 // ============================================================
 
+/**
+ * @brief Inicializa el dispositivo DirectX 11, la cadena de intercambio, shaders y búferes geométricos.
+ * 
+ * @param nativeWindow Puntero a la ventana nativa de la plataforma (HWND en Windows).
+ * @param width Ancho del área de cliente de la ventana.
+ * @param height Alto del área de cliente de la ventana.
+ * @return true Si la inicialización fue completamente exitosa.
+ * @return false Si ocurrió algún error en la creación de dispositivos o recursos.
+ */
 bool Engine::Initialize(
   void* nativeWindow,
   std::uint32_t width,
@@ -327,22 +289,13 @@ bool Engine::Initialize(
     return false;
   }
 
-
-  Implementation& engine =
-    *m_implementation;
-
+  Implementation& engine = *m_implementation;
 
   engine.ReleaseResources();
 
-
-  engine.window =
-    static_cast<HWND>(nativeWindow);
-
-
+  engine.window = static_cast<HWND>(nativeWindow);
   engine.width = width;
-
   engine.height = height;
-
 
   // ========================================================
   // SWAP CHAIN
@@ -350,49 +303,18 @@ bool Engine::Initialize(
 
   DXGI_SWAP_CHAIN_DESC swapChainDescription{};
 
-
   swapChainDescription.BufferCount = 2;
-
-
-  swapChainDescription.BufferDesc.Width =
-    engine.width;
-
-
-  swapChainDescription.BufferDesc.Height =
-    engine.height;
-
-
-  swapChainDescription.BufferDesc.Format =
-    DXGI_FORMAT_R8G8B8A8_UNORM;
-
-
-  swapChainDescription.BufferDesc.RefreshRate.Numerator =
-    60;
-
-
-  swapChainDescription.BufferDesc.RefreshRate.Denominator =
-    1;
-
-
-  swapChainDescription.BufferUsage =
-    DXGI_USAGE_RENDER_TARGET_OUTPUT;
-
-
-  swapChainDescription.OutputWindow =
-    engine.window;
-
-
+  swapChainDescription.BufferDesc.Width = engine.width;
+  swapChainDescription.BufferDesc.Height = engine.height;
+  swapChainDescription.BufferDesc.Format = DXGI_FORMAT_R8G8B8A8_UNORM;
+  swapChainDescription.BufferDesc.RefreshRate.Numerator = 60;
+  swapChainDescription.BufferDesc.RefreshRate.Denominator = 1;
+  swapChainDescription.BufferUsage = DXGI_USAGE_RENDER_TARGET_OUTPUT;
+  swapChainDescription.OutputWindow = engine.window;
   swapChainDescription.SampleDesc.Count = 1;
-
   swapChainDescription.SampleDesc.Quality = 0;
-
-
   swapChainDescription.Windowed = TRUE;
-
-
-  swapChainDescription.SwapEffect =
-    DXGI_SWAP_EFFECT_DISCARD;
-
+  swapChainDescription.SwapEffect = DXGI_SWAP_EFFECT_DISCARD;
 
   // ========================================================
   // FEATURE LEVEL
@@ -403,9 +325,7 @@ bool Engine::Initialize(
       D3D_FEATURE_LEVEL_11_0
   };
 
-
   D3D_FEATURE_LEVEL selectedFeatureLevel{};
-
 
   // ========================================================
   // CREATE DEVICE + SWAP CHAIN
@@ -427,7 +347,6 @@ bool Engine::Initialize(
       &engine.context
     );
 
-
   // ========================================================
   // WARP FALLBACK
   // ========================================================
@@ -435,11 +354,8 @@ bool Engine::Initialize(
   if (FAILED(result))
   {
     SafeRelease(engine.swapChain);
-
     SafeRelease(engine.context);
-
     SafeRelease(engine.device);
-
 
     result =
       D3D11CreateDeviceAndSwapChain(
@@ -458,21 +374,17 @@ bool Engine::Initialize(
       );
   }
 
-
   if (FAILED(result))
   {
     engine.ReleaseResources();
-
     return false;
   }
-
 
   // ========================================================
   // BACK BUFFER
   // ========================================================
 
   ID3D11Texture2D* backBuffer = nullptr;
-
 
   result =
     engine.swapChain->GetBuffer(
@@ -483,14 +395,11 @@ bool Engine::Initialize(
         )
     );
 
-
   if (FAILED(result))
   {
     engine.ReleaseResources();
-
     return false;
   }
-
 
   result =
     engine.device->CreateRenderTargetView(
@@ -499,17 +408,13 @@ bool Engine::Initialize(
       &engine.renderTarget
     );
 
-
   SafeRelease(backBuffer);
-
 
   if (FAILED(result))
   {
     engine.ReleaseResources();
-
     return false;
   }
-
 
   // ========================================================
   // VIEWPORT
@@ -517,30 +422,17 @@ bool Engine::Initialize(
 
   D3D11_VIEWPORT viewport{};
 
-
   viewport.TopLeftX = 0.0f;
-
   viewport.TopLeftY = 0.0f;
-
-
-  viewport.Width =
-    static_cast<float>(engine.width);
-
-
-  viewport.Height =
-    static_cast<float>(engine.height);
-
-
+  viewport.Width = static_cast<float>(engine.width);
+  viewport.Height = static_cast<float>(engine.height);
   viewport.MinDepth = 0.0f;
-
   viewport.MaxDepth = 1.0f;
-
 
   engine.context->RSSetViewports(
     1,
     &viewport
   );
-
 
   // ========================================================
   // DEPTH BUFFER
@@ -548,37 +440,15 @@ bool Engine::Initialize(
 
   D3D11_TEXTURE2D_DESC depthBufferDescription{};
 
-
-  depthBufferDescription.Width =
-    engine.width;
-
-
-  depthBufferDescription.Height =
-    engine.height;
-
-
+  depthBufferDescription.Width = engine.width;
+  depthBufferDescription.Height = engine.height;
   depthBufferDescription.MipLevels = 1;
-
-
   depthBufferDescription.ArraySize = 1;
-
-
-  depthBufferDescription.Format =
-    DXGI_FORMAT_D24_UNORM_S8_UINT;
-
-
+  depthBufferDescription.Format = DXGI_FORMAT_D24_UNORM_S8_UINT;
   depthBufferDescription.SampleDesc.Count = 1;
-
   depthBufferDescription.SampleDesc.Quality = 0;
-
-
-  depthBufferDescription.Usage =
-    D3D11_USAGE_DEFAULT;
-
-
-  depthBufferDescription.BindFlags =
-    D3D11_BIND_DEPTH_STENCIL;
-
+  depthBufferDescription.Usage = D3D11_USAGE_DEFAULT;
+  depthBufferDescription.BindFlags = D3D11_BIND_DEPTH_STENCIL;
 
   result =
     engine.device->CreateTexture2D(
@@ -587,14 +457,11 @@ bool Engine::Initialize(
       &engine.depthStencilBuffer
     );
 
-
   if (FAILED(result))
   {
     engine.ReleaseResources();
-
     return false;
   }
-
 
   // ========================================================
   // DEPTH STENCIL VIEW
@@ -607,23 +474,18 @@ bool Engine::Initialize(
       &engine.depthStencilView
     );
 
-
   if (FAILED(result))
   {
     engine.ReleaseResources();
-
     return false;
   }
-
 
   // ========================================================
   // SHADERS
   // ========================================================
 
   ID3DBlob* vertexShaderBlob = nullptr;
-
   ID3DBlob* pixelShaderBlob = nullptr;
-
 
   // --------------------------------------------------------
   // VERTEX SHADER
@@ -637,10 +499,8 @@ bool Engine::Initialize(
   ))
   {
     engine.ReleaseResources();
-
     return false;
   }
-
 
   // --------------------------------------------------------
   // PIXEL SHADER
@@ -654,12 +514,9 @@ bool Engine::Initialize(
   ))
   {
     SafeRelease(vertexShaderBlob);
-
     engine.ReleaseResources();
-
     return false;
   }
-
 
   // ========================================================
   // CREATE VERTEX SHADER
@@ -673,18 +530,13 @@ bool Engine::Initialize(
       &engine.vertexShader
     );
 
-
   if (FAILED(result))
   {
     SafeRelease(pixelShaderBlob);
-
     SafeRelease(vertexShaderBlob);
-
     engine.ReleaseResources();
-
     return false;
   }
-
 
   // ========================================================
   // CREATE PIXEL SHADER
@@ -698,18 +550,13 @@ bool Engine::Initialize(
       &engine.pixelShader
     );
 
-
   if (FAILED(result))
   {
     SafeRelease(pixelShaderBlob);
-
     SafeRelease(vertexShaderBlob);
-
     engine.ReleaseResources();
-
     return false;
   }
-
 
   // ========================================================
   // INPUT LAYOUT
@@ -748,7 +595,6 @@ bool Engine::Initialize(
       }
   };
 
-
   result =
     engine.device->CreateInputLayout(
       inputElements,
@@ -758,19 +604,14 @@ bool Engine::Initialize(
       &engine.inputLayout
     );
 
-
   SafeRelease(pixelShaderBlob);
-
   SafeRelease(vertexShaderBlob);
-
 
   if (FAILED(result))
   {
     engine.ReleaseResources();
-
     return false;
   }
-
 
   // ========================================================
   // CUBE VERTICES
@@ -799,7 +640,6 @@ bool Engine::Initialize(
         { 1.0f, 1.0f, 0.0f, 1.0f }
     },
 
-
     // Atrás
     {
         { -0.5f, -0.5f, 0.5f },
@@ -822,41 +662,21 @@ bool Engine::Initialize(
     }
   };
 
-
   // ========================================================
   // VERTEX BUFFER
   // ========================================================
 
   D3D11_BUFFER_DESC vertexBufferDescription{};
 
-
-  vertexBufferDescription.ByteWidth =
-    static_cast<UINT>(
-      sizeof(vertices)
-      );
-
-
-  vertexBufferDescription.Usage =
-    D3D11_USAGE_IMMUTABLE;
-
-
-  vertexBufferDescription.BindFlags =
-    D3D11_BIND_VERTEX_BUFFER;
-
-
+  vertexBufferDescription.ByteWidth = static_cast<UINT>(sizeof(vertices));
+  vertexBufferDescription.Usage = D3D11_USAGE_IMMUTABLE;
+  vertexBufferDescription.BindFlags = D3D11_BIND_VERTEX_BUFFER;
   vertexBufferDescription.CPUAccessFlags = 0;
-
   vertexBufferDescription.MiscFlags = 0;
-
   vertexBufferDescription.StructureByteStride = 0;
 
-
   D3D11_SUBRESOURCE_DATA initialVertexData{};
-
-
-  initialVertexData.pSysMem =
-    vertices;
-
+  initialVertexData.pSysMem = vertices;
 
   result =
     engine.device->CreateBuffer(
@@ -865,14 +685,11 @@ bool Engine::Initialize(
       &engine.vertexBuffer
     );
 
-
   if (FAILED(result))
   {
     engine.ReleaseResources();
-
     return false;
   }
-
 
   // ========================================================
   // INDEX BUFFER
@@ -905,30 +722,14 @@ bool Engine::Initialize(
     3, 6, 7
   };
 
-
   D3D11_BUFFER_DESC indexBufferDescription{};
 
-
-  indexBufferDescription.ByteWidth =
-    static_cast<UINT>(
-      sizeof(indices)
-      );
-
-
-  indexBufferDescription.Usage =
-    D3D11_USAGE_IMMUTABLE;
-
-
-  indexBufferDescription.BindFlags =
-    D3D11_BIND_INDEX_BUFFER;
-
+  indexBufferDescription.ByteWidth = static_cast<UINT>(sizeof(indices));
+  indexBufferDescription.Usage = D3D11_USAGE_IMMUTABLE;
+  indexBufferDescription.BindFlags = D3D11_BIND_INDEX_BUFFER;
 
   D3D11_SUBRESOURCE_DATA indexData{};
-
-
-  indexData.pSysMem =
-    indices;
-
+  indexData.pSysMem = indices;
 
   result =
     engine.device->CreateBuffer(
@@ -937,14 +738,11 @@ bool Engine::Initialize(
       &engine.indexBuffer
     );
 
-
   if (FAILED(result))
   {
     engine.ReleaseResources();
-
     return false;
   }
-
 
   // ========================================================
   // TRANSFORM BUFFER
@@ -952,18 +750,9 @@ bool Engine::Initialize(
 
   D3D11_BUFFER_DESC transformBufferDescription{};
 
-
-  transformBufferDescription.ByteWidth =
-    sizeof(Implementation::TransformBuffer);
-
-
-  transformBufferDescription.Usage =
-    D3D11_USAGE_DEFAULT;
-
-
-  transformBufferDescription.BindFlags =
-    D3D11_BIND_CONSTANT_BUFFER;
-
+  transformBufferDescription.ByteWidth = sizeof(Implementation::TransformBuffer);
+  transformBufferDescription.Usage = D3D11_USAGE_DEFAULT;
+  transformBufferDescription.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
 
   result =
     engine.device->CreateBuffer(
@@ -972,14 +761,11 @@ bool Engine::Initialize(
       &engine.transformBuffer
     );
 
-
   if (FAILED(result))
   {
     engine.ReleaseResources();
-
     return false;
   }
-
 
   // ========================================================
   // RASTERIZER STATE
@@ -987,18 +773,9 @@ bool Engine::Initialize(
 
   D3D11_RASTERIZER_DESC rasterizerDescription{};
 
-
-  rasterizerDescription.FillMode =
-    D3D11_FILL_SOLID;
-
-
-  rasterizerDescription.CullMode =
-    D3D11_CULL_NONE;
-
-
-  rasterizerDescription.DepthClipEnable =
-    TRUE;
-
+  rasterizerDescription.FillMode = D3D11_FILL_SOLID;
+  rasterizerDescription.CullMode = D3D11_CULL_NONE;
+  rasterizerDescription.DepthClipEnable = TRUE;
 
   result =
     engine.device->CreateRasterizerState(
@@ -1006,22 +783,17 @@ bool Engine::Initialize(
       &engine.rasterizerState
     );
 
-
   if (FAILED(result))
   {
     engine.ReleaseResources();
-
     return false;
   }
-
 
   // ========================================================
   // START TIME
   // ========================================================
 
-  engine.startTime =
-    std::chrono::steady_clock::now();
-
+  engine.startTime = std::chrono::steady_clock::now();
 
   return true;
 }
@@ -1031,15 +803,15 @@ bool Engine::Initialize(
 // RENDER
 // ============================================================
 
+/**
+ * @brief Ejecuta el ciclo de renderizado por fotograma, actualizando matrices de transformación y dibujando la escena.
+ */
 void Engine::Render() noexcept
 {
   if (!m_implementation)
     return;
 
-
-  Implementation& engine =
-    *m_implementation;
-
+  Implementation& engine = *m_implementation;
 
   if (!engine.context ||
     !engine.swapChain ||
@@ -1056,7 +828,6 @@ void Engine::Render() noexcept
     return;
   }
 
-
   // ========================================================
   // CLEAR COLOR
   // ========================================================
@@ -1069,7 +840,6 @@ void Engine::Render() noexcept
       1.0f
   };
 
-
   // ========================================================
   // RENDER TARGET + DEPTH
   // ========================================================
@@ -1080,12 +850,10 @@ void Engine::Render() noexcept
     engine.depthStencilView
   );
 
-
   engine.context->ClearRenderTargetView(
     engine.renderTarget,
     clearColor
   );
-
 
   engine.context->ClearDepthStencilView(
     engine.depthStencilView,
@@ -1095,27 +863,22 @@ void Engine::Render() noexcept
     0
   );
 
-
   // ========================================================
   // TIME
   // ========================================================
 
-  const auto currentTime =
-    std::chrono::steady_clock::now();
-
+  const auto currentTime = std::chrono::steady_clock::now();
 
   const float elapsedSeconds =
     std::chrono::duration<float>(
       currentTime - engine.startTime
     ).count();
 
-
   // ========================================================
   // WORLD
   // ========================================================
 
   using namespace DirectX;
-
 
   const XMMATRIX world =
     XMMatrixRotationX(
@@ -1124,7 +887,6 @@ void Engine::Render() noexcept
     XMMatrixRotationY(
       elapsedSeconds * 0.8f
     );
-
 
   // ========================================================
   // CAMERA
@@ -1138,7 +900,6 @@ void Engine::Render() noexcept
       1.0f
     );
 
-
   const XMVECTOR cameraTarget =
     XMVectorSet(
       0.0f,
@@ -1146,7 +907,6 @@ void Engine::Render() noexcept
       0.0f,
       1.0f
     );
-
 
   const XMVECTOR cameraUp =
     XMVectorSet(
@@ -1156,14 +916,12 @@ void Engine::Render() noexcept
       0.0f
     );
 
-
   const XMMATRIX view =
     XMMatrixLookAtLH(
       cameraPosition,
       cameraTarget,
       cameraUp
     );
-
 
   // ========================================================
   // PROJECTION
@@ -1173,7 +931,6 @@ void Engine::Render() noexcept
     static_cast<float>(engine.width) /
     static_cast<float>(engine.height);
 
-
   const XMMATRIX projection =
     XMMatrixPerspectiveFovLH(
       XM_PIDIV4,
@@ -1182,13 +939,11 @@ void Engine::Render() noexcept
       100.0f
     );
 
-
   // ========================================================
   // TRANSFORM
   // ========================================================
 
   Implementation::TransformBuffer transform{};
-
 
   XMStoreFloat4x4(
     &transform.worldViewProjection,
@@ -1199,7 +954,6 @@ void Engine::Render() noexcept
       projection
     )
   );
-
 
   // ========================================================
   // UPDATE CONSTANT BUFFER
@@ -1214,17 +968,12 @@ void Engine::Render() noexcept
     0
   );
 
-
   // ========================================================
   // VERTEX BUFFER
   // ========================================================
 
-  constexpr UINT stride =
-    sizeof(Implementation::Vertex);
-
-
+  constexpr UINT stride = sizeof(Implementation::Vertex);
   constexpr UINT offset = 0;
-
 
   engine.context->IASetVertexBuffers(
     0,
@@ -1233,7 +982,6 @@ void Engine::Render() noexcept
     &stride,
     &offset
   );
-
 
   // ========================================================
   // INDEX BUFFER
@@ -1245,7 +993,6 @@ void Engine::Render() noexcept
     0
   );
 
-
   // ========================================================
   // INPUT LAYOUT
   // ========================================================
@@ -1253,7 +1000,6 @@ void Engine::Render() noexcept
   engine.context->IASetInputLayout(
     engine.inputLayout
   );
-
 
   // ========================================================
   // RASTERIZER
@@ -1263,7 +1009,6 @@ void Engine::Render() noexcept
     engine.rasterizerState
   );
 
-
   // ========================================================
   // TOPOLOGY
   // ========================================================
@@ -1271,7 +1016,6 @@ void Engine::Render() noexcept
   engine.context->IASetPrimitiveTopology(
     D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST
   );
-
 
   // ========================================================
   // VERTEX SHADER
@@ -1283,7 +1027,6 @@ void Engine::Render() noexcept
     0
   );
 
-
   // ========================================================
   // TRANSFORM BUFFER TO VERTEX SHADER
   // ========================================================
@@ -1293,7 +1036,6 @@ void Engine::Render() noexcept
     1,
     &engine.transformBuffer
   );
-
 
   // ========================================================
   // PIXEL SHADER
@@ -1305,7 +1047,6 @@ void Engine::Render() noexcept
     0
   );
 
-
   // ========================================================
   // DRAW CUBE
   // ========================================================
@@ -1315,7 +1056,6 @@ void Engine::Render() noexcept
     0,
     0
   );
-
 
   // ========================================================
   // PRESENT
@@ -1332,6 +1072,9 @@ void Engine::Render() noexcept
 // SHUTDOWN
 // ============================================================
 
+/**
+ * @brief Apaga el motor y libera de forma segura todos los recursos asociados.
+ */
 void Engine::Shutdown() noexcept
 {
   if (m_implementation)
