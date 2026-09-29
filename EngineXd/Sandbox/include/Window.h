@@ -44,7 +44,8 @@ public:
 	 * @return true Si la ventana fue creada exitosamente.
 	 * @return false Si ocurrió algún error durante el registro o creación.
 	 */
-	bool Create(
+	bool 
+		Create(
 		HINSTANCE Instance,
 		const wchar_t* title,
 		UINT clientWidth,
@@ -56,7 +57,8 @@ public:
 	 *
 	 * @param showCommand Parámetro de visibilidad de Win32 (ej. SW_SHOW, SW_HIDE).
 	 */
-	void Show(int showCommand) noexcept;
+	void
+		Show(int showCommand) noexcept;
 
 	/**
 	 * @brief Procesa la cola de mensajes del sistema operativo (bucle de mensajes).
@@ -64,7 +66,8 @@ public:
 	 * @return true Si la aplicación debe continuar su ejecución.
 	 * @return false Cuando recibe el mensaje WM_QUIT para finalizar.
 	 */
-	bool ProcessMessages() noexcept;
+	bool 
+		ProcessMessages() noexcept;
 
 	/**
 	 * @brief Obtiene el identificador nativo de la ventana de Windows.
@@ -81,14 +84,16 @@ public:
 	 * @return true Si la ventana está minimizada.
 	 * @return false En caso contrario.
 	 */
-	bool IsMinimized() const noexcept;
+	bool
+		IsMinimized() const noexcept;
 
 private:
 
 	/**
 	 * @brief Destruye la ventana y desregistra la clase de Windows si corresponde.
 	 */
-	void Destroy() noexcept;
+	void 
+		Destroy() noexcept;
 
 	/**
 	 * @brief Función de devolución de llamada estática para procesar los mensajes del sistema (Window Procedure).
@@ -99,7 +104,8 @@ private:
 	 * @param lParam Parámetro adicional del mensaje (dependiente del mensaje).
 	 * @return LRESULT Resultado del procesamiento del mensaje.
 	 */
-	static LRESULT CALLBACK
+	static
+		LRESULT CALLBACK
 		WindowProc(
 			HWND handle,
 			UINT message,
@@ -108,10 +114,12 @@ private:
 		);
 
 	/// Nombre único de la clase de ventana de Windows.
-	static constexpr const wchar_t* ClassName =
+	static 
+		constexpr const wchar_t* ClassName =
 		L"Grafica3DEngineWindowClass";
 
 	HINSTANCE m_instance = nullptr; ///< Instancia de la aplicación asociada a la ventana.
 	HWND m_handle = nullptr;         ///< Identificador (handle) de la ventana nativa.
-	bool m_classRegistered = false;  ///< Indicador de si la clase de ventana ya fue registrada en el sistema.
+	bool 
+		m_classRegistered = false;  ///< Indicador de si la clase de ventana ya fue registrada en el sistema.
 };

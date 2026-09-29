@@ -66,7 +66,8 @@ int APIENTRY wWinMain(
     return -1;
   }
 
-  while (window.ProcessMessages())
+  while
+    (window.ProcessMessages())
   {
     // Evitar renderizar mientras la ventana está minimizada
     if (window.IsMinimized())

@@ -64,7 +64,8 @@
  * @param object Referencia al puntero del objeto.
  */
 template<typename T>
-void SafeRelease(T*& object) noexcept
+void 
+SafeRelease(T*& object) noexcept
 {
   if (object != nullptr)
   {
@@ -82,13 +83,15 @@ void SafeRelease(T*& object) noexcept
  * @struct Engine::Implementation
  * @brief Estructura interna que oculta los detalles de implementación (patrón PImpl) del motor gráfico DirectX 11.
  */
-struct Engine::Implementation
+struct 
+  Engine::Implementation
 {
   /**
    * @struct Vertex
    * @brief Define la estructura de un vértice individual con posición tricolor/coordenadas y color.
    */
-  struct Vertex
+  struct 
+    Vertex
   {
     float position[3]; ///< Coordenadas espaciales (X, Y, Z).
     float color[4];    ///< Componentes de color RGBA.
@@ -98,7 +101,8 @@ struct Engine::Implementation
    * @struct TransformBuffer
    * @brief Estructura alineada a 16 bytes para la matriz de transformación enviada al sombreador de vértices.
    */
-  struct alignas(16) TransformBuffer
+  struct 
+    alignas(16) TransformBuffer
   {
     DirectX::XMFLOAT4X4 worldViewProjection; ///< Matriz combinada Mundo-Vista-Proyección.
   };
@@ -137,7 +141,9 @@ struct Engine::Implementation
  * @return true Si la compilación es exitosa.
  * @return false Si ocurre algún error de compilación.
  */
-  static bool CompileShader(
+  static 
+    bool 
+    CompileShader (
     const wchar_t* filename,
     const char* entryPoint,
     const char* shaderModel,
@@ -202,7 +208,8 @@ struct Engine::Implementation
   /**
    * @brief Libera todos los recursos gráficos y limpia el estado del motor.
    */
-  void ReleaseResources() noexcept
+  void 
+    ReleaseResources() noexcept
   {
     if (context)
     {
@@ -275,8 +282,10 @@ Engine::~Engine() noexcept
  * @return true Si la inicialización fue completamente exitosa.
  * @return false Si ocurrió algún error en la creación de dispositivos o recursos.
  */
-bool Engine::Initialize(
-  void* nativeWindow,
+bool 
+Engine::Initialize(
+  void*
+  nativeWindow,
   std::uint32_t width,
   std::uint32_t height
 ) noexcept
@@ -562,7 +571,8 @@ bool Engine::Initialize(
   // INPUT LAYOUT
   // ========================================================
 
-  constexpr D3D11_INPUT_ELEMENT_DESC inputElements[]
+  constexpr 
+    D3D11_INPUT_ELEMENT_DESC inputElements[]
   {
       {
           "POSITION",
@@ -617,7 +627,8 @@ bool Engine::Initialize(
   // CUBE VERTICES
   // ========================================================
 
-  constexpr Implementation::Vertex vertices[]
+  constexpr 
+    Implementation::Vertex vertices[]
   {
     // Frente
     {
@@ -695,7 +706,8 @@ bool Engine::Initialize(
   // INDEX BUFFER
   // ========================================================
 
-  constexpr std::uint16_t indices[]
+  constexpr
+    std::uint16_t indices[]
   {
     // Frente
     0, 1, 2,
@@ -806,7 +818,8 @@ bool Engine::Initialize(
 /**
  * @brief Ejecuta el ciclo de renderizado por fotograma, actualizando matrices de transformación y dibujando la escena.
  */
-void Engine::Render() noexcept
+void 
+Engine::Render() noexcept
 {
   if (!m_implementation)
     return;
@@ -832,7 +845,8 @@ void Engine::Render() noexcept
   // CLEAR COLOR
   // ========================================================
 
-  constexpr float clearColor[]
+  constexpr
+    float clearColor[]
   {
       0.03f,
       0.04f,
@@ -867,9 +881,11 @@ void Engine::Render() noexcept
   // TIME
   // ========================================================
 
-  const auto currentTime = std::chrono::steady_clock::now();
+  const 
+    auto currentTime = std::chrono::steady_clock::now();
 
-  const float elapsedSeconds =
+  const 
+    float elapsedSeconds =
     std::chrono::duration<float>(
       currentTime - engine.startTime
     ).count();
@@ -880,7 +896,8 @@ void Engine::Render() noexcept
 
   using namespace DirectX;
 
-  const XMMATRIX world =
+  const 
+    XMMATRIX world =
     XMMatrixRotationX(
       elapsedSeconds * 0.4f
     ) *
@@ -892,7 +909,8 @@ void Engine::Render() noexcept
   // CAMERA
   // ========================================================
 
-  const XMVECTOR cameraPosition =
+  const 
+    XMVECTOR cameraPosition =
     XMVectorSet(
       0.0f,
       1.5f,
@@ -900,7 +918,8 @@ void Engine::Render() noexcept
       1.0f
     );
 
-  const XMVECTOR cameraTarget =
+  const 
+    XMVECTOR cameraTarget =
     XMVectorSet(
       0.0f,
       0.0f,
@@ -908,7 +927,8 @@ void Engine::Render() noexcept
       1.0f
     );
 
-  const XMVECTOR cameraUp =
+  const
+    XMVECTOR cameraUp =
     XMVectorSet(
       0.0f,
       1.0f,
@@ -916,7 +936,8 @@ void Engine::Render() noexcept
       0.0f
     );
 
-  const XMMATRIX view =
+  const 
+    XMMATRIX view =
     XMMatrixLookAtLH(
       cameraPosition,
       cameraTarget,
@@ -927,11 +948,13 @@ void Engine::Render() noexcept
   // PROJECTION
   // ========================================================
 
-  const float aspectRatio =
+  const
+    float aspectRatio =
     static_cast<float>(engine.width) /
     static_cast<float>(engine.height);
 
-  const XMMATRIX projection =
+  const
+    XMMATRIX projection =
     XMMatrixPerspectiveFovLH(
       XM_PIDIV4,
       aspectRatio,
@@ -972,8 +995,10 @@ void Engine::Render() noexcept
   // VERTEX BUFFER
   // ========================================================
 
-  constexpr UINT stride = sizeof(Implementation::Vertex);
-  constexpr UINT offset = 0;
+  constexpr 
+    UINT stride = sizeof(Implementation::Vertex);
+  constexpr
+    UINT offset = 0;
 
   engine.context->IASetVertexBuffers(
     0,
@@ -1075,7 +1100,8 @@ void Engine::Render() noexcept
 /**
  * @brief Apaga el motor y libera de forma segura todos los recursos asociados.
  */
-void Engine::Shutdown() noexcept
+void 
+Engine::Shutdown() noexcept
 {
   if (m_implementation)
   {

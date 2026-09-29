@@ -22,7 +22,8 @@ Window::~Window(){
  * @return true Si el registro y la creación de la ventana fueron exitosos.
  * @return false Si alguno de los parámetros es inválido o falla la API de Windows.
  */
-bool Window::Create(
+bool
+Window::Create(
 	HINSTANCE Instance,
 	const wchar_t* title,
 	UINT clientWidth,
@@ -115,7 +116,8 @@ bool Window::Create(
  * 
  * @param showCommand Bandera de visibilidad (ej. SW_SHOW, SW_MINIMIZE).
  */
-void Window::Show(int showCommand) noexcept{
+void 
+Window::Show(int showCommand) noexcept{
 	if (m_handle)
 	{
 		ShowWindow(m_handle, showCommand);
@@ -129,7 +131,8 @@ void Window::Show(int showCommand) noexcept{
  * @return true Si la ejecución de la aplicación debe continuar.
  * @return false Si se interceptó el mensaje WM_QUIT para cerrar la aplicación.
  */
-bool Window::ProcessMessages() noexcept{
+bool 
+Window::ProcessMessages() noexcept{
 	MSG message{};
 
 	while (PeekMessageW(
@@ -157,14 +160,16 @@ bool Window::ProcessMessages() noexcept{
  * @return true Si la ventana existe y está minimizada (iconizada).
  * @return false En caso contrario.
  */
-bool Window::IsMinimized() const noexcept{
+bool 
+Window::IsMinimized() const noexcept{
 	return m_handle && IsIconic(m_handle);
 }
 
 /**
  * @brief Libera el identificador de la ventana y desregistra la clase de ventana de Windows.
  */
-void Window::Destroy() noexcept{
+void 
+Window::Destroy() noexcept{
 	if (m_handle)
 	{
 		DestroyWindow(m_handle);

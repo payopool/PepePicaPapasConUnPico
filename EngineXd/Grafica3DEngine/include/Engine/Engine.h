@@ -35,17 +35,20 @@ public:
    * @return true Si la inicialización se completó con éxito.
    * @return false Si ocurrió algún error durante el proceso.
    */
-  bool Initialize(void* nativeWindow, std::uint32_t width, std::uint32_t height) noexcept;
+  bool 
+    Initialize(void* nativeWindow, std::uint32_t width, std::uint32_t height) noexcept;
 
   /**
    * @brief Ejecuta el ciclo de renderizado por fotograma de la escena.
    */
-  void Render() noexcept;
+  void
+    Render() noexcept;
 
   /**
    * @brief Apaga el motor y libera de forma segura todos los recursos gráficos y de memoria asociados.
    */
-  void Shutdown() noexcept;
+  void 
+    Shutdown() noexcept;
 
 private:
   struct Implementation;              ///< Declaración anticipada de la estructura interna (PImpl).
