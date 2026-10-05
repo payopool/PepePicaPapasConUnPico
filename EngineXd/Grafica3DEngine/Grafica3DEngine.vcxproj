@@ -196,7 +196,9 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\Engine\Api.h" />
+    <ClInclude Include="include\Engine\Device.h" />
     <ClInclude Include="include\Engine\Engine.h" />
+    <ClInclude Include="include\Engine\Prerequisitos.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

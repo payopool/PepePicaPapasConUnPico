@@ -29,5 +29,11 @@
     <ClInclude Include="include\Engine\Engine.h">
       <Filter>Archivos de encabezado\Engine</Filter>
     </ClInclude>
+    <ClInclude Include="include\Engine\Prerequisitos.h">
+      <Filter>Archivos de encabezado\Engine</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Engine\Device.h">
+      <Filter>Archivos de encabezado\Engine</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
