@@ -3,12 +3,12 @@
   "WorkspaceRootPath": "D:\\Repos\\GraficasComputacionales3D\\EngineXd\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{B8BB08C6-72F1-4A63-A0DD-44002E8EE8AA}|Grafica3DEngine\\Grafica3DEngine.vcxproj|D:\\Repos\\GraficasComputacionales3D\\EngineXd\\Grafica3DEngine\\include\\Rendering\\DeviceContext.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
-      "RelativeMoniker": "D:0:0:{B8BB08C6-72F1-4A63-A0DD-44002E8EE8AA}|Grafica3DEngine\\Grafica3DEngine.vcxproj|solutionrelative:Grafica3DEngine\\include\\Rendering\\DeviceContext.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
-    },
-    {
       "AbsoluteMoniker": "D:0:0:{B8BB08C6-72F1-4A63-A0DD-44002E8EE8AA}|Grafica3DEngine\\Grafica3DEngine.vcxproj|D:\\Repos\\GraficasComputacionales3D\\EngineXd\\Grafica3DEngine\\include\\Rendering\\DeviceContext.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
       "RelativeMoniker": "D:0:0:{B8BB08C6-72F1-4A63-A0DD-44002E8EE8AA}|Grafica3DEngine\\Grafica3DEngine.vcxproj|solutionrelative:Grafica3DEngine\\include\\Rendering\\DeviceContext.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{B8BB08C6-72F1-4A63-A0DD-44002E8EE8AA}|Grafica3DEngine\\Grafica3DEngine.vcxproj|D:\\Repos\\GraficasComputacionales3D\\EngineXd\\Grafica3DEngine\\include\\Rendering\\DeviceContext.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
+      "RelativeMoniker": "D:0:0:{B8BB08C6-72F1-4A63-A0DD-44002E8EE8AA}|Grafica3DEngine\\Grafica3DEngine.vcxproj|solutionrelative:Grafica3DEngine\\include\\Rendering\\DeviceContext.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{B8BB08C6-72F1-4A63-A0DD-44002E8EE8AA}|Grafica3DEngine\\Grafica3DEngine.vcxproj|D:\\Repos\\GraficasComputacionales3D\\EngineXd\\Grafica3DEngine\\source\\Engine.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
@@ -73,27 +73,27 @@
             {
               "$type": "Document",
               "DocumentIndex": 0,
-              "Title": "DeviceContext.h",
-              "DocumentMoniker": "D:\\Repos\\GraficasComputacionales3D\\EngineXd\\Grafica3DEngine\\include\\Rendering\\DeviceContext.h",
-              "RelativeDocumentMoniker": "Grafica3DEngine\\include\\Rendering\\DeviceContext.h",
-              "ToolTip": "D:\\Repos\\GraficasComputacionales3D\\EngineXd\\Grafica3DEngine\\include\\Rendering\\DeviceContext.h*",
-              "RelativeToolTip": "Grafica3DEngine\\include\\Rendering\\DeviceContext.h*",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAABUAAAADAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000680|",
-              "WhenOpened": "2026-10-12T13:20:24.659Z",
+              "Title": "DeviceContext.cpp",
+              "DocumentMoniker": "D:\\Repos\\GraficasComputacionales3D\\EngineXd\\Grafica3DEngine\\include\\Rendering\\DeviceContext.cpp",
+              "RelativeDocumentMoniker": "Grafica3DEngine\\include\\Rendering\\DeviceContext.cpp",
+              "ToolTip": "D:\\Repos\\GraficasComputacionales3D\\EngineXd\\Grafica3DEngine\\include\\Rendering\\DeviceContext.cpp",
+              "RelativeToolTip": "Grafica3DEngine\\include\\Rendering\\DeviceContext.cpp",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAEAAAAdAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000677|",
+              "WhenOpened": "2026-10-12T13:28:49.086Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
               "DocumentIndex": 1,
-              "Title": "DeviceContext.cpp",
-              "DocumentMoniker": "D:\\Repos\\GraficasComputacionales3D\\EngineXd\\Grafica3DEngine\\include\\Rendering\\DeviceContext.cpp",
-              "RelativeDocumentMoniker": "Grafica3DEngine\\include\\Rendering\\DeviceContext.cpp",
-              "ToolTip": "D:\\Repos\\GraficasComputacionales3D\\EngineXd\\Grafica3DEngine\\include\\Rendering\\DeviceContext.cpp*",
-              "RelativeToolTip": "Grafica3DEngine\\include\\Rendering\\DeviceContext.cpp*",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAEAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000677|",
-              "WhenOpened": "2026-10-12T13:28:49.086Z",
+              "Title": "DeviceContext.h",
+              "DocumentMoniker": "D:\\Repos\\GraficasComputacionales3D\\EngineXd\\Grafica3DEngine\\include\\Rendering\\DeviceContext.h",
+              "RelativeDocumentMoniker": "Grafica3DEngine\\include\\Rendering\\DeviceContext.h",
+              "ToolTip": "D:\\Repos\\GraficasComputacionales3D\\EngineXd\\Grafica3DEngine\\include\\Rendering\\DeviceContext.h",
+              "RelativeToolTip": "Grafica3DEngine\\include\\Rendering\\DeviceContext.h",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAEAAAAdAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000680|",
+              "WhenOpened": "2026-10-12T13:20:24.659Z",
               "EditorCaption": ""
             },
             {
