@@ -187,7 +187,9 @@
     </Manifest>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="include\Rendering\DeviceContext.cpp" />
     <ClCompile Include="source\Engine.cpp" />
+    <ClCompile Include="source\Rendering\Device.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\ThirdParties\DirectXTK\DirectXTK_Desktop_2022.vcxproj">
@@ -199,6 +201,8 @@
     <ClInclude Include="include\Engine\Device.h" />
     <ClInclude Include="include\Engine\Engine.h" />
     <ClInclude Include="include\Engine\Prerequisitos.h" />
+    <ClInclude Include="include\Rendering\Device.h" />
+    <ClInclude Include="include\Rendering\DeviceContext.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

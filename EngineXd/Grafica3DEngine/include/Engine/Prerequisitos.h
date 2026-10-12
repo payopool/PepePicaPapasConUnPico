@@ -1,7 +1,9 @@
 #pragma once
+
 #include "API.h"
+
 #include <cstdint>
-#include <directxmath.h>
+#include <DirectXMath.h>
 #include <Windows.h>
 #include <d3d11.h>
 #include <d3dcompiler.h>
@@ -11,8 +13,20 @@
 #include <iostream>
 #include <string>
 #include <new>
+#include <sstream>
 
-extern "C" {
+template<typename T>
+void SafeRelease(T*& object)
+{
+  if (object)
+  {
+    object->Release();
+    object = nullptr;
+  }
+}
+
+extern "C"
+{
   ENGINE_API bool
     Engine_Initialize(HWND hwnd, int width, int height) noexcept;
 

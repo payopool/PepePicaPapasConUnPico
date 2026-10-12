@@ -50,6 +50,8 @@ public:
   void 
     Shutdown() noexcept;
 
+  void Update() noexcept;
+
 private:
   struct Implementation;              ///< Declaración anticipada de la estructura interna (PImpl).
   Implementation* m_implementation;   ///< Puntero a los detalles de implementación privados del motor.
