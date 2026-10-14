@@ -3,16 +3,16 @@
   "WorkspaceRootPath": "D:\\Repos\\GraficasComputacionales3D\\EngineXd\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{B8BB08C6-72F1-4A63-A0DD-44002E8EE8AA}|Grafica3DEngine\\Grafica3DEngine.vcxproj|D:\\Repos\\GraficasComputacionales3D\\EngineXd\\Grafica3DEngine\\include\\Rendering\\DeviceContext.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
-      "RelativeMoniker": "D:0:0:{B8BB08C6-72F1-4A63-A0DD-44002E8EE8AA}|Grafica3DEngine\\Grafica3DEngine.vcxproj|solutionrelative:Grafica3DEngine\\include\\Rendering\\DeviceContext.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
+      "AbsoluteMoniker": "D:0:0:{B8BB08C6-72F1-4A63-A0DD-44002E8EE8AA}|Grafica3DEngine\\Grafica3DEngine.vcxproj|D:\\Repos\\GraficasComputacionales3D\\EngineXd\\Grafica3DEngine\\source\\Engine.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
+      "RelativeMoniker": "D:0:0:{B8BB08C6-72F1-4A63-A0DD-44002E8EE8AA}|Grafica3DEngine\\Grafica3DEngine.vcxproj|solutionrelative:Grafica3DEngine\\source\\Engine.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{B8BB08C6-72F1-4A63-A0DD-44002E8EE8AA}|Grafica3DEngine\\Grafica3DEngine.vcxproj|D:\\Repos\\GraficasComputacionales3D\\EngineXd\\Grafica3DEngine\\include\\Rendering\\DeviceContext.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
       "RelativeMoniker": "D:0:0:{B8BB08C6-72F1-4A63-A0DD-44002E8EE8AA}|Grafica3DEngine\\Grafica3DEngine.vcxproj|solutionrelative:Grafica3DEngine\\include\\Rendering\\DeviceContext.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{B8BB08C6-72F1-4A63-A0DD-44002E8EE8AA}|Grafica3DEngine\\Grafica3DEngine.vcxproj|D:\\Repos\\GraficasComputacionales3D\\EngineXd\\Grafica3DEngine\\source\\Engine.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
-      "RelativeMoniker": "D:0:0:{B8BB08C6-72F1-4A63-A0DD-44002E8EE8AA}|Grafica3DEngine\\Grafica3DEngine.vcxproj|solutionrelative:Grafica3DEngine\\source\\Engine.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
+      "AbsoluteMoniker": "D:0:0:{B8BB08C6-72F1-4A63-A0DD-44002E8EE8AA}|Grafica3DEngine\\Grafica3DEngine.vcxproj|D:\\Repos\\GraficasComputacionales3D\\EngineXd\\Grafica3DEngine\\include\\Rendering\\DeviceContext.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
+      "RelativeMoniker": "D:0:0:{B8BB08C6-72F1-4A63-A0DD-44002E8EE8AA}|Grafica3DEngine\\Grafica3DEngine.vcxproj|solutionrelative:Grafica3DEngine\\include\\Rendering\\DeviceContext.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{B8BB08C6-72F1-4A63-A0DD-44002E8EE8AA}|Grafica3DEngine\\Grafica3DEngine.vcxproj|D:\\Repos\\GraficasComputacionales3D\\EngineXd\\Grafica3DEngine\\include\\Engine\\Engine.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
@@ -54,7 +54,7 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 1,
+          "SelectedChildIndex": 3,
           "Children": [
             {
               "$type": "Document",
@@ -67,21 +67,7 @@
               "ViewState": "AgIAAAAAAAAAAAAAAAAAABoAAABHAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000677|",
               "WhenOpened": "2026-09-14T01:39:34.525Z",
-              "IsPinned": true,
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 0,
-              "Title": "DeviceContext.cpp",
-              "DocumentMoniker": "D:\\Repos\\GraficasComputacionales3D\\EngineXd\\Grafica3DEngine\\include\\Rendering\\DeviceContext.cpp",
-              "RelativeDocumentMoniker": "Grafica3DEngine\\include\\Rendering\\DeviceContext.cpp",
-              "ToolTip": "D:\\Repos\\GraficasComputacionales3D\\EngineXd\\Grafica3DEngine\\include\\Rendering\\DeviceContext.cpp",
-              "RelativeToolTip": "Grafica3DEngine\\include\\Rendering\\DeviceContext.cpp",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAEAAAAdAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000677|",
-              "WhenOpened": "2026-10-12T13:28:49.086Z",
-              "EditorCaption": ""
+              "IsPinned": true
             },
             {
               "$type": "Document",
@@ -91,7 +77,7 @@
               "RelativeDocumentMoniker": "Grafica3DEngine\\include\\Rendering\\DeviceContext.h",
               "ToolTip": "D:\\Repos\\GraficasComputacionales3D\\EngineXd\\Grafica3DEngine\\include\\Rendering\\DeviceContext.h",
               "RelativeToolTip": "Grafica3DEngine\\include\\Rendering\\DeviceContext.h",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAEAAAAdAAAAAAAAAA==",
+              "ViewState": "AgIAADAAAAAAAAAAAAAAALkAAAACAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000680|",
               "WhenOpened": "2026-10-12T13:20:24.659Z",
               "EditorCaption": ""
@@ -99,12 +85,25 @@
             {
               "$type": "Document",
               "DocumentIndex": 2,
+              "Title": "DeviceContext.cpp",
+              "DocumentMoniker": "D:\\Repos\\GraficasComputacionales3D\\EngineXd\\Grafica3DEngine\\include\\Rendering\\DeviceContext.cpp",
+              "RelativeDocumentMoniker": "Grafica3DEngine\\include\\Rendering\\DeviceContext.cpp",
+              "ToolTip": "D:\\Repos\\GraficasComputacionales3D\\EngineXd\\Grafica3DEngine\\include\\Rendering\\DeviceContext.cpp",
+              "RelativeToolTip": "Grafica3DEngine\\include\\Rendering\\DeviceContext.cpp",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAALkAAAACAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000677|",
+              "WhenOpened": "2026-10-12T13:28:49.086Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
               "Title": "Engine.cpp",
               "DocumentMoniker": "D:\\Repos\\GraficasComputacionales3D\\EngineXd\\Grafica3DEngine\\source\\Engine.cpp",
               "RelativeDocumentMoniker": "Grafica3DEngine\\source\\Engine.cpp",
               "ToolTip": "D:\\Repos\\GraficasComputacionales3D\\EngineXd\\Grafica3DEngine\\source\\Engine.cpp",
               "RelativeToolTip": "Grafica3DEngine\\source\\Engine.cpp",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAIAAAAhAAAAAAAAAA==",
+              "ViewState": "AgIAANUAAAAAAAAAAAAAAN8AAAAGAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000677|",
               "WhenOpened": "2026-09-14T01:39:27.305Z",
               "EditorCaption": ""
@@ -119,8 +118,7 @@
               "RelativeToolTip": "Grafica3DEngine\\include\\Engine\\Engine.h",
               "ViewState": "AgIAACsAAAAAAAAAAAAAADQAAAAZAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000680|",
-              "WhenOpened": "2026-09-14T01:39:22.629Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-09-14T01:39:22.629Z"
             },
             {
               "$type": "Document",
@@ -132,8 +130,7 @@
               "RelativeToolTip": "Grafica3DEngine\\include\\Rendering\\Device.h",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAEAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000680|",
-              "WhenOpened": "2026-10-12T12:55:10.055Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-10-12T12:55:10.055Z"
             },
             {
               "$type": "Document",
@@ -145,8 +142,7 @@
               "RelativeToolTip": "Grafica3DEngine\\source\\Rendering\\Device.cpp",
               "ViewState": "AgIAAO0AAAAAAAAAAAAiwPgAAAApAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000677|",
-              "WhenOpened": "2026-10-07T13:44:49.058Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-10-07T13:44:49.058Z"
             },
             {
               "$type": "Document",
@@ -158,8 +154,7 @@
               "RelativeToolTip": "Grafica3DEngine\\include\\Engine\\Prerequisitos.h",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAACgAAAABAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000680|",
-              "WhenOpened": "2026-10-05T13:28:36.312Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-10-05T13:28:36.312Z"
             },
             {
               "$type": "Document",

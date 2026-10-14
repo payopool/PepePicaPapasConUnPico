@@ -1,5 +1,6 @@
 #include <Engine/Engine.h>
 #include <Rendering/Device.h>
+#include <Rendering/DeviceContext.h>
 #include "Engine/Prerequisitos.h"
 
 #define MESSAGE(category, function, message) \
@@ -9,7 +10,6 @@
         stream << "[" << category << "] " << function << ": " << message << "\n"; \
         OutputDebugStringA(stream.str().c_str()); \
     } while (false)
-
 
 #define ERROR(category, function, message) \
     do \
@@ -40,7 +40,7 @@ struct Engine::Implementation
 
   Device device;
 
-  ID3D11DeviceContext* context = nullptr;
+  DeviceContext context;
 
   IDXGISwapChain* swapChain = nullptr;
 
@@ -128,12 +128,6 @@ struct Engine::Implementation
   void
     ReleaseResources() noexcept
   {
-    if (context)
-    {
-      context->ClearState();
-      context->Flush();
-    }
-
     SafeRelease(transformBuffer);
     SafeRelease(rasterizerState);
     SafeRelease(indexBuffer);
@@ -146,7 +140,7 @@ struct Engine::Implementation
     SafeRelease(renderTarget);
     SafeRelease(swapChain);
 
-    SafeRelease(context);
+    context.destroy();
 
     device.destroy();
 
@@ -189,8 +183,8 @@ Engine::Initialize(
     return false;
   }
 
-  Implementation& engine = *m_implementation;
-
+  Implementation& engine =
+    *m_implementation;
 
   engine.ReleaseResources();
 
@@ -207,10 +201,13 @@ Engine::Initialize(
 
   engine.device.init();
 
-  const Device& device = engine.device;
-  ID3D11Device* d3dDevice = device.getDevice();
+  const Device& device =
+    engine.device;
 
-  if (engine.device.getDevice() == nullptr)
+  ID3D11Device* d3dDevice =
+    device.getDevice();
+
+  if (d3dDevice == nullptr)
   {
     engine.ReleaseResources();
     return false;
@@ -221,11 +218,13 @@ Engine::Initialize(
   // DEVICE CONTEXT
   // ========================================================
 
- d3dDevice->GetImmediateContext(
-    &engine.context
-);
+  HRESULT result =
+    d3dDevice->GetImmediateContext(
+      engine.context.getDeviceContextAddress()
+    );
 
-  if (engine.context == nullptr)
+  if (FAILED(result) ||
+    engine.context.getDeviceContext() == nullptr)
   {
     engine.ReleaseResources();
     return false;
@@ -280,7 +279,7 @@ Engine::Initialize(
 
   IDXGIDevice* dxgiDevice = nullptr;
 
-  HRESULT result =
+  result =
     d3dDevice->QueryInterface(
       __uuidof(IDXGIDevice),
       reinterpret_cast<void**>(
@@ -422,7 +421,7 @@ Engine::Initialize(
   viewport.MinDepth = 0.0f;
   viewport.MaxDepth = 1.0f;
 
-  engine.context->RSSetViewports(
+  engine.context.RSSetViewports(
     1,
     &viewport
   );
@@ -501,7 +500,6 @@ Engine::Initialize(
   ID3DBlob* vertexShaderBlob = nullptr;
 
   ID3DBlob* pixelShaderBlob = nullptr;
-
 
   if (!Implementation::CompileShader(
     L"shaders\\Cube.hlsl",
@@ -617,10 +615,8 @@ Engine::Initialize(
       &engine.inputLayout
     );
 
-
   SafeRelease(pixelShaderBlob);
   SafeRelease(vertexShaderBlob);
-
 
   if (FAILED(result))
   {
@@ -694,12 +690,10 @@ Engine::Initialize(
   vertexBufferDescription.BindFlags =
     D3D11_BIND_VERTEX_BUFFER;
 
-
   D3D11_SUBRESOURCE_DATA initialVertexData{};
 
   initialVertexData.pSysMem =
     vertices;
-
 
   result =
     engine.device.CreateBuffer(
@@ -754,12 +748,10 @@ Engine::Initialize(
   indexBufferDescription.BindFlags =
     D3D11_BIND_INDEX_BUFFER;
 
-
   D3D11_SUBRESOURCE_DATA indexData{};
 
   indexData.pSysMem =
     indices;
-
 
   result =
     engine.device.CreateBuffer(
@@ -792,7 +784,6 @@ Engine::Initialize(
   transformBufferDescription.BindFlags =
     D3D11_BIND_CONSTANT_BUFFER;
 
-
   result =
     engine.device.CreateBuffer(
       &transformBufferDescription,
@@ -821,7 +812,6 @@ Engine::Initialize(
 
   rasterizerDescription.DepthClipEnable =
     TRUE;
-
 
   result =
     engine.device.CreateRasterizerState(
@@ -863,8 +853,7 @@ Engine::Render() noexcept
   Implementation& engine =
     *m_implementation;
 
-
-  if (!engine.context ||
+  if (!engine.context.getDeviceContext() ||
     !engine.swapChain ||
     !engine.renderTarget ||
     !engine.depthStencilView ||
@@ -897,18 +886,18 @@ Engine::Render() noexcept
   // RENDER TARGET + DEPTH
   // ========================================================
 
-  engine.context->OMSetRenderTargets(
+  engine.context.OMSetRenderTargets(
     1,
     &engine.renderTarget,
     engine.depthStencilView
   );
 
-  engine.context->ClearRenderTargetView(
+  engine.context.ClearRenderTargetView(
     engine.renderTarget,
     clearColor
   );
 
-  engine.context->ClearDepthStencilView(
+  engine.context.ClearDepthStencilView(
     engine.depthStencilView,
     D3D11_CLEAR_DEPTH |
     D3D11_CLEAR_STENCIL,
@@ -1024,7 +1013,7 @@ Engine::Render() noexcept
   // UPDATE CONSTANT BUFFER
   // ========================================================
 
-  engine.context->UpdateSubresource(
+  engine.context.UpdateSubresource(
     engine.transformBuffer,
     0,
     nullptr,
@@ -1043,7 +1032,7 @@ Engine::Render() noexcept
 
   constexpr UINT offset = 0;
 
-  engine.context->IASetVertexBuffers(
+  engine.context.IASetVertexBuffers(
     0,
     1,
     &engine.vertexBuffer,
@@ -1056,7 +1045,7 @@ Engine::Render() noexcept
   // INDEX BUFFER
   // ========================================================
 
-  engine.context->IASetIndexBuffer(
+  engine.context.IASetIndexBuffer(
     engine.indexBuffer,
     DXGI_FORMAT_R16_UINT,
     0
@@ -1067,7 +1056,7 @@ Engine::Render() noexcept
   // INPUT LAYOUT
   // ========================================================
 
-  engine.context->IASetInputLayout(
+  engine.context.IASetInputLayout(
     engine.inputLayout
   );
 
@@ -1076,7 +1065,7 @@ Engine::Render() noexcept
   // RASTERIZER
   // ========================================================
 
-  engine.context->RSSetState(
+  engine.context.RSSetState(
     engine.rasterizerState
   );
 
@@ -1085,7 +1074,7 @@ Engine::Render() noexcept
   // TOPOLOGY
   // ========================================================
 
-  engine.context->IASetPrimitiveTopology(
+  engine.context.IASetPrimitiveTopology(
     D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST
   );
 
@@ -1094,10 +1083,8 @@ Engine::Render() noexcept
   // VERTEX SHADER
   // ========================================================
 
-  engine.context->VSSetShader(
-    engine.vertexShader,
-    nullptr,
-    0
+  engine.context.VSSetShader(
+    engine.vertexShader
   );
 
 
@@ -1105,7 +1092,7 @@ Engine::Render() noexcept
   // TRANSFORM BUFFER
   // ========================================================
 
-  engine.context->VSSetConstantBuffers(
+  engine.context.VSSetConstantBuffers(
     0,
     1,
     &engine.transformBuffer
@@ -1116,10 +1103,8 @@ Engine::Render() noexcept
   // PIXEL SHADER
   // ========================================================
 
-  engine.context->PSSetShader(
-    engine.pixelShader,
-    nullptr,
-    0
+  engine.context.PSSetShader(
+    engine.pixelShader
   );
 
 
@@ -1127,7 +1112,7 @@ Engine::Render() noexcept
   // DRAW CUBE
   // ========================================================
 
-  engine.context->DrawIndexed(
+  engine.context.DrawIndexed(
     36,
     0,
     0
