@@ -203,6 +203,8 @@
     <ClInclude Include="include\Engine\Prerequisitos.h" />
     <ClInclude Include="include\Rendering\Device.h" />
     <ClInclude Include="include\Rendering\DeviceContext.h" />
+    <ClInclude Include="include\Rendering\SawpChain.h" />
+    <ClInclude Include="include\Rendering\Texture2D.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

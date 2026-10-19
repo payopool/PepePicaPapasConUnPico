@@ -1,23 +1,13 @@
 #include <Engine/Engine.h>
 #include <Rendering/Device.h>
 #include <Rendering/DeviceContext.h>
-#include "Engine/Prerequisitos.h"
+#include <Engine/Prerequisitos.h>
 
-#define MESSAGE(category, function, message) \
-    do \
-    { \
-        std::ostringstream stream; \
-        stream << "[" << category << "] " << function << ": " << message << "\n"; \
-        OutputDebugStringA(stream.str().c_str()); \
-    } while (false)
-
-#define ERROR(category, function, message) \
-    do \
-    { \
-        std::ostringstream stream; \
-        stream << "[" << category << "] ERROR - " << function << ": " << message << "\n"; \
-        OutputDebugStringA(stream.str().c_str()); \
-    } while (false)
+#include <cstddef>
+#include <cstdint>
+#include <chrono>
+#include <new>
+#include <string>
 
 
 struct Engine::Implementation
@@ -39,7 +29,6 @@ struct Engine::Implementation
   std::uint32_t height = 0;
 
   Device device;
-
   DeviceContext context;
 
   IDXGISwapChain* swapChain = nullptr;
@@ -47,34 +36,31 @@ struct Engine::Implementation
   ID3D11RenderTargetView* renderTarget = nullptr;
 
   ID3D11Texture2D* depthStencilBuffer = nullptr;
-
   ID3D11DepthStencilView* depthStencilView = nullptr;
 
   ID3D11Buffer* vertexBuffer = nullptr;
-
   ID3D11Buffer* indexBuffer = nullptr;
-
   ID3D11Buffer* transformBuffer = nullptr;
 
   ID3D11RasterizerState* rasterizerState = nullptr;
 
   ID3D11VertexShader* vertexShader = nullptr;
-
   ID3D11PixelShader* pixelShader = nullptr;
-
   ID3D11InputLayout* inputLayout = nullptr;
 
   std::chrono::steady_clock::time_point startTime{};
 
 
-  static bool
-    CompileShader(
-      const wchar_t* fileName,
-      const char* entryPoint,
-      const char* shaderModel,
-      ID3DBlob** shaderBlob)
+  static bool CompileShader(
+    const wchar_t* filename,
+    const char* entryPoint,
+    const char* shaderModel,
+    ID3DBlob** shaderBlob) noexcept
   {
-    if (shaderBlob == nullptr)
+    if (!filename ||
+      !entryPoint ||
+      !shaderModel ||
+      !shaderBlob)
     {
       return false;
     }
@@ -85,15 +71,21 @@ struct Engine::Implementation
       D3DCOMPILE_ENABLE_STRICTNESS;
 
 #ifdef _DEBUG
+
     compileFlags |= D3DCOMPILE_DEBUG;
     compileFlags |= D3DCOMPILE_SKIP_OPTIMIZATION;
+
+#else
+
+    compileFlags |= D3DCOMPILE_OPTIMIZATION_LEVEL3;
+
 #endif
 
     ID3DBlob* errors = nullptr;
 
-    HRESULT result =
+    const HRESULT result =
       D3DCompileFromFile(
-        fileName,
+        filename,
         nullptr,
         D3D_COMPILE_STANDARD_FILE_INCLUDE,
         entryPoint,
@@ -125,23 +117,26 @@ struct Engine::Implementation
   }
 
 
-  void
-    ReleaseResources() noexcept
+  void ReleaseResources() noexcept
   {
-    SafeRelease(transformBuffer);
     SafeRelease(rasterizerState);
+
+    SafeRelease(transformBuffer);
     SafeRelease(indexBuffer);
     SafeRelease(vertexBuffer);
+
     SafeRelease(inputLayout);
     SafeRelease(pixelShader);
     SafeRelease(vertexShader);
+
     SafeRelease(depthStencilView);
     SafeRelease(depthStencilBuffer);
+
     SafeRelease(renderTarget);
+
     SafeRelease(swapChain);
 
     context.destroy();
-
     device.destroy();
 
     window = nullptr;
@@ -163,13 +158,11 @@ Engine::~Engine() noexcept
   Shutdown();
 
   delete m_implementation;
-
   m_implementation = nullptr;
 }
 
 
-bool
-Engine::Initialize(
+bool Engine::Initialize(
   void* nativeWindow,
   std::uint32_t width,
   std::uint32_t height
@@ -186,6 +179,7 @@ Engine::Initialize(
   Implementation& engine =
     *m_implementation;
 
+  // Permite reinicializar la instancia de forma segura.
   engine.ReleaseResources();
 
   engine.window =
@@ -193,42 +187,6 @@ Engine::Initialize(
 
   engine.width = width;
   engine.height = height;
-
-
-  // ========================================================
-  // DEVICE
-  // ========================================================
-
-  engine.device.init();
-
-  const Device& device =
-    engine.device;
-
-  ID3D11Device* d3dDevice =
-    device.getDevice();
-
-  if (d3dDevice == nullptr)
-  {
-    engine.ReleaseResources();
-    return false;
-  }
-
-
-  // ========================================================
-  // DEVICE CONTEXT
-  // ========================================================
-
-  HRESULT result =
-    d3dDevice->GetImmediateContext(
-      engine.context.getDeviceContextAddress()
-    );
-
-  if (FAILED(result) ||
-    engine.context.getDeviceContext() == nullptr)
-  {
-    engine.ReleaseResources();
-    return false;
-  }
 
 
   // ========================================================
@@ -274,81 +232,60 @@ Engine::Initialize(
 
 
   // ========================================================
-  // DXGI DEVICE
+  // DIRECT3D 11
   // ========================================================
 
-  IDXGIDevice* dxgiDevice = nullptr;
-
-  result =
-    d3dDevice->QueryInterface(
-      __uuidof(IDXGIDevice),
-      reinterpret_cast<void**>(
-        &dxgiDevice
-        )
-    );
-
-  if (FAILED(result))
+  constexpr D3D_FEATURE_LEVEL featureLevels[]
   {
-    engine.ReleaseResources();
-    return false;
-  }
+      D3D_FEATURE_LEVEL_11_0
+  };
+
+  D3D_FEATURE_LEVEL selectedFeatureLevel{};
 
 
-  // ========================================================
-  // DXGI ADAPTER
-  // ========================================================
-
-  IDXGIAdapter* adapter = nullptr;
-
-  result =
-    dxgiDevice->GetAdapter(
-      &adapter
-    );
-
-  SafeRelease(dxgiDevice);
-
-  if (FAILED(result))
-  {
-    engine.ReleaseResources();
-    return false;
-  }
-
-
-  // ========================================================
-  // DXGI FACTORY
-  // ========================================================
-
-  IDXGIFactory* factory = nullptr;
-
-  result =
-    adapter->GetParent(
-      __uuidof(IDXGIFactory),
-      reinterpret_cast<void**>(
-        &factory
-        )
-    );
-
-  SafeRelease(adapter);
-
-  if (FAILED(result))
-  {
-    engine.ReleaseResources();
-    return false;
-  }
-
-
-  // ========================================================
-  // CREATE SWAP CHAIN
-  // ========================================================
-
-  result =
-    factory->CreateSwapChain(
-      d3dDevice,
+  HRESULT result =
+    D3D11CreateDeviceAndSwapChain(
+      nullptr,
+      D3D_DRIVER_TYPE_HARDWARE,
+      nullptr,
+      0,
+      featureLevels,
+      ARRAYSIZE(featureLevels),
+      D3D11_SDK_VERSION,
       &swapChainDescription,
-      &engine.swapChain
+      &engine.swapChain,
+      engine.device.getDeviceAddress(),
+      &selectedFeatureLevel,
+      engine.context.getDeviceContextAddress()
     );
 
-  SafeRelease(factory);
+
+  // Si falla la GPU física, utiliza WARP.
+  if (FAILED(result))
+  {
+    SafeRelease(engine.swapChain);
+
+    engine.context.destroy();
+    engine.device.destroy();
+
+
+    result =
+      D3D11CreateDeviceAndSwapChain(
+        nullptr,
+        D3D_DRIVER_TYPE_WARP,
+        nullptr,
+        0,
+        featureLevels,
+        ARRAYSIZE(featureLevels),
+        D3D11_SDK_VERSION,
+        &swapChainDescription,
+        &engine.swapChain,
+        engine.device.getDeviceAddress(),
+        &selectedFeatureLevel,
+        engine.context.getDeviceContextAddress()
+      );
+  }
+
 
   if (FAILED(result))
   {
@@ -372,6 +309,7 @@ Engine::Initialize(
         )
     );
 
+
   if (FAILED(result))
   {
     engine.ReleaseResources();
@@ -391,6 +329,7 @@ Engine::Initialize(
     );
 
   SafeRelease(backBuffer);
+
 
   if (FAILED(result))
   {
@@ -420,6 +359,7 @@ Engine::Initialize(
 
   viewport.MinDepth = 0.0f;
   viewport.MaxDepth = 1.0f;
+
 
   engine.context.RSSetViewports(
     1,
@@ -468,6 +408,7 @@ Engine::Initialize(
       &engine.depthStencilBuffer
     );
 
+
   if (FAILED(result))
   {
     engine.ReleaseResources();
@@ -486,6 +427,7 @@ Engine::Initialize(
       &engine.depthStencilView
     );
 
+
   if (FAILED(result))
   {
     engine.ReleaseResources();
@@ -498,8 +440,8 @@ Engine::Initialize(
   // ========================================================
 
   ID3DBlob* vertexShaderBlob = nullptr;
-
   ID3DBlob* pixelShaderBlob = nullptr;
+
 
   if (!Implementation::CompileShader(
     L"shaders\\Cube.hlsl",
@@ -521,6 +463,7 @@ Engine::Initialize(
   ))
   {
     SafeRelease(vertexShaderBlob);
+
     engine.ReleaseResources();
     return false;
   }
@@ -538,10 +481,12 @@ Engine::Initialize(
       &engine.vertexShader
     );
 
+
   if (FAILED(result))
   {
     SafeRelease(pixelShaderBlob);
     SafeRelease(vertexShaderBlob);
+
     engine.ReleaseResources();
     return false;
   }
@@ -559,10 +504,12 @@ Engine::Initialize(
       &engine.pixelShader
     );
 
+
   if (FAILED(result))
   {
     SafeRelease(pixelShaderBlob);
     SafeRelease(vertexShaderBlob);
+
     engine.ReleaseResources();
     return false;
   }
@@ -615,8 +562,10 @@ Engine::Initialize(
       &engine.inputLayout
     );
 
+
   SafeRelease(pixelShaderBlob);
   SafeRelease(vertexShaderBlob);
+
 
   if (FAILED(result))
   {
@@ -652,22 +601,22 @@ Engine::Initialize(
       },
 
       {
-          { -0.5f, -0.5f, 0.5f },
+          { -0.5f, -0.5f,  0.5f },
           { 0.0f, 1.0f, 1.0f, 1.0f }
       },
 
       {
-          { -0.5f,  0.5f, 0.5f },
+          { -0.5f,  0.5f,  0.5f },
           { 1.0f, 0.0f, 1.0f, 1.0f }
       },
 
       {
-          {  0.5f,  0.5f, 0.5f },
+          {  0.5f,  0.5f,  0.5f },
           { 1.0f, 1.0f, 1.0f, 1.0f }
       },
 
       {
-          {  0.5f, -0.5f, 0.5f },
+          {  0.5f, -0.5f,  0.5f },
           { 1.0f, 0.3f, 0.0f, 1.0f }
       }
   };
@@ -690,10 +639,12 @@ Engine::Initialize(
   vertexBufferDescription.BindFlags =
     D3D11_BIND_VERTEX_BUFFER;
 
+
   D3D11_SUBRESOURCE_DATA initialVertexData{};
 
   initialVertexData.pSysMem =
     vertices;
+
 
   result =
     engine.device.CreateBuffer(
@@ -701,6 +652,7 @@ Engine::Initialize(
       &initialVertexData,
       &engine.vertexBuffer
     );
+
 
   if (FAILED(result))
   {
@@ -748,10 +700,12 @@ Engine::Initialize(
   indexBufferDescription.BindFlags =
     D3D11_BIND_INDEX_BUFFER;
 
+
   D3D11_SUBRESOURCE_DATA indexData{};
 
   indexData.pSysMem =
     indices;
+
 
   result =
     engine.device.CreateBuffer(
@@ -759,6 +713,7 @@ Engine::Initialize(
       &indexData,
       &engine.indexBuffer
     );
+
 
   if (FAILED(result))
   {
@@ -784,12 +739,14 @@ Engine::Initialize(
   transformBufferDescription.BindFlags =
     D3D11_BIND_CONSTANT_BUFFER;
 
+
   result =
     engine.device.CreateBuffer(
       &transformBufferDescription,
       nullptr,
       &engine.transformBuffer
     );
+
 
   if (FAILED(result))
   {
@@ -813,11 +770,13 @@ Engine::Initialize(
   rasterizerDescription.DepthClipEnable =
     TRUE;
 
+
   result =
     engine.device.CreateRasterizerState(
       &rasterizerDescription,
       &engine.rasterizerState
     );
+
 
   if (FAILED(result))
   {
@@ -832,6 +791,7 @@ Engine::Initialize(
 
   engine.startTime =
     std::chrono::steady_clock::now();
+
 
   return true;
 }
@@ -852,6 +812,7 @@ Engine::Render() noexcept
 
   Implementation& engine =
     *m_implementation;
+
 
   if (!engine.context.getDeviceContext() ||
     !engine.swapChain ||
@@ -892,10 +853,12 @@ Engine::Render() noexcept
     engine.depthStencilView
   );
 
+
   engine.context.ClearRenderTargetView(
     engine.renderTarget,
     clearColor
   );
+
 
   engine.context.ClearDepthStencilView(
     engine.depthStencilView,
@@ -963,6 +926,7 @@ Engine::Render() noexcept
       0.0f
     );
 
+
   const XMMATRIX view =
     XMMatrixLookAtLH(
       cameraPosition,
@@ -983,6 +947,7 @@ Engine::Render() noexcept
       engine.height
       );
 
+
   const XMMATRIX projection =
     XMMatrixPerspectiveFovLH(
       XM_PIDIV4,
@@ -997,6 +962,7 @@ Engine::Render() noexcept
   // ========================================================
 
   Implementation::TransformBuffer transform{};
+
 
   XMStoreFloat4x4(
     &transform.worldViewProjection,
@@ -1031,6 +997,7 @@ Engine::Render() noexcept
     sizeof(Implementation::Vertex);
 
   constexpr UINT offset = 0;
+
 
   engine.context.IASetVertexBuffers(
     0,

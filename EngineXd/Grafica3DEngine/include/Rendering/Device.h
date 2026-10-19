@@ -68,6 +68,12 @@ public:
     CreateRasterizerState(const D3D11_RASTERIZER_DESC* pRasterizerDesc,
       ID3D11RasterizerState** ppRasterizerState);
 
+  ID3D11Device**
+    getDeviceAddress() noexcept
+  {
+    return &m_device;
+  }
+
 private:
   ID3D11Device* m_device = nullptr;
   D3D_FEATURE_LEVEL featureLevels = D3D_FEATURE_LEVEL_11_0;
