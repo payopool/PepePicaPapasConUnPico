@@ -1,14 +1,8 @@
 #include <Engine/Engine.h>
 #include <Rendering/Device.h>
 #include <Rendering/DeviceContext.h>
+#include <Rendering/Texture2D.h>
 #include <Engine/Prerequisitos.h>
-
-#include <cstddef>
-#include <cstdint>
-#include <chrono>
-#include <new>
-#include <string>
-
 
 struct Engine::Implementation
 {
@@ -30,6 +24,7 @@ struct Engine::Implementation
 
   Device device;
   DeviceContext context;
+  Texture2D texture;
 
   IDXGISwapChain* swapChain = nullptr;
 
@@ -49,7 +44,6 @@ struct Engine::Implementation
   ID3D11InputLayout* inputLayout = nullptr;
 
   std::chrono::steady_clock::time_point startTime{};
-
 
   static bool CompileShader(
     const wchar_t* filename,
@@ -116,7 +110,6 @@ struct Engine::Implementation
     return true;
   }
 
-
   void ReleaseResources() noexcept
   {
     SafeRelease(rasterizerState);
@@ -135,6 +128,8 @@ struct Engine::Implementation
     SafeRelease(renderTarget);
 
     SafeRelease(swapChain);
+
+    texture.destroy();
 
     context.destroy();
     device.destroy();
@@ -179,7 +174,6 @@ bool Engine::Initialize(
   Implementation& engine =
     *m_implementation;
 
-  // Permite reinicializar la instancia de forma segura.
   engine.ReleaseResources();
 
   engine.window =
@@ -242,7 +236,6 @@ bool Engine::Initialize(
 
   D3D_FEATURE_LEVEL selectedFeatureLevel{};
 
-
   HRESULT result =
     D3D11CreateDeviceAndSwapChain(
       nullptr,
@@ -261,13 +254,13 @@ bool Engine::Initialize(
 
 
   // Si falla la GPU física, utiliza WARP.
+
   if (FAILED(result))
   {
     SafeRelease(engine.swapChain);
 
     engine.context.destroy();
     engine.device.destroy();
-
 
     result =
       D3D11CreateDeviceAndSwapChain(
@@ -286,6 +279,24 @@ bool Engine::Initialize(
       );
   }
 
+
+  if (FAILED(result))
+  {
+    engine.ReleaseResources();
+    return false;
+  }
+
+
+  // ========================================================
+  // TEXTURA
+  // ========================================================
+
+  result =
+    engine.texture.init(
+      engine.device,
+      "textures\\cubo",
+      PNG
+    );
 
   if (FAILED(result))
   {
@@ -918,6 +929,7 @@ Engine::Render() noexcept
       1.0f
     );
 
+
   const XMVECTOR cameraUp =
     XMVectorSet(
       0.0f,
@@ -1072,6 +1084,17 @@ Engine::Render() noexcept
 
   engine.context.PSSetShader(
     engine.pixelShader
+  );
+
+
+  // ========================================================
+  // TEXTURE
+  // ========================================================
+
+  engine.texture.render(
+    engine.context,
+    0,
+    1
   );
 
 

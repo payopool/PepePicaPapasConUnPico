@@ -190,6 +190,7 @@
     <ClCompile Include="include\Rendering\DeviceContext.cpp" />
     <ClCompile Include="source\Engine.cpp" />
     <ClCompile Include="source\Rendering\Device.cpp" />
+    <ClCompile Include="source\Rendering\Texture2D.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\ThirdParties\DirectXTK\DirectXTK_Desktop_2022.vcxproj">
