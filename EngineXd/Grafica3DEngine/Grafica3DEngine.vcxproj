@@ -189,6 +189,7 @@
   <ItemGroup>
     <ClCompile Include="include\Rendering\DeviceContext.cpp" />
     <ClCompile Include="source\Engine.cpp" />
+    <ClCompile Include="source\Rendering\Buffer.cpp" />
     <ClCompile Include="source\Rendering\Device.cpp" />
     <ClCompile Include="source\Rendering\Texture2D.cpp" />
   </ItemGroup>
@@ -201,7 +202,9 @@
     <ClInclude Include="include\Engine\Api.h" />
     <ClInclude Include="include\Engine\Device.h" />
     <ClInclude Include="include\Engine\Engine.h" />
+    <ClInclude Include="include\Engine\MeshComponent.h" />
     <ClInclude Include="include\Engine\Prerequisitos.h" />
+    <ClInclude Include="include\Rendering\Buffer.h" />
     <ClInclude Include="include\Rendering\Device.h" />
     <ClInclude Include="include\Rendering\DeviceContext.h" />
     <ClInclude Include="include\Rendering\SawpChain.h" />

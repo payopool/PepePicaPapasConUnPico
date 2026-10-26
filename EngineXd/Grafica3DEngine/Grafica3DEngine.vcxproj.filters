@@ -36,6 +36,9 @@
     <ClCompile Include="source\Rendering\Texture2D.cpp">
       <Filter>Archivos de recursos\Rendering</Filter>
     </ClCompile>
+    <ClCompile Include="source\Rendering\Buffer.cpp">
+      <Filter>Archivos de recursos\Rendering</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\Engine\Api.h">
@@ -60,6 +63,12 @@
       <Filter>Archivos de encabezado\Rendering</Filter>
     </ClInclude>
     <ClInclude Include="include\Rendering\SawpChain.h">
+      <Filter>Archivos de encabezado\Rendering</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Engine\MeshComponent.h">
+      <Filter>Archivos de encabezado\Engine</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Rendering\Buffer.h">
       <Filter>Archivos de encabezado\Rendering</Filter>
     </ClInclude>
   </ItemGroup>
