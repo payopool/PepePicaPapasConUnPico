@@ -1,10 +1,9 @@
-
 #include "Rendering/Device.h"
 
 void
 Device::init()
 {
-  constexpr D3D_FEATURE_LEVEL featureLevels[]
+  constexpr D3D_FEATURE_LEVEL supportedFeatureLevels[]
   {
       D3D_FEATURE_LEVEL_11_0
   };
@@ -15,8 +14,8 @@ Device::init()
       D3D_DRIVER_TYPE_HARDWARE,
       nullptr,
       0,
-      featureLevels,
-      ARRAYSIZE(featureLevels),
+      supportedFeatureLevels,
+      ARRAYSIZE(supportedFeatureLevels),
       D3D11_SDK_VERSION,
       &m_device,
       &this->featureLevels,
