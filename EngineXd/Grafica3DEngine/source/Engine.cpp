@@ -1,55 +1,83 @@
+/**
+ * @file Engine.cpp
+ * @brief Implementación de la clase Engine para la gestión del ciclo de vida, inicialización y renderizado del motor gráfico 3D en DirectX 11.
+ */
+
 #include <Engine/Engine.h>
 #include <Rendering/Device.h>
 #include <Rendering/DeviceContext.h>
 #include <Rendering/Texture2D.h>
 #include <Engine/Prerequisitos.h>
 
+ /**
+  * @struct Engine::Implementation
+  * @brief Estructura interna (patrón PImpl) que encapsula todos los recursos, dispositivos, búferes y estados de DirectX 11 del motor.
+  */
 struct Engine::Implementation
 {
+  /**
+   * @struct Vertex
+   * @brief Define la estructura de un vértice con posición espacial y color para el motor.
+   */
   struct Vertex
   {
-    float position[3];
-    float color[4];
+    float position[3]; ///< Coordenadas espaciales (X, Y, Z).
+    float color[4];    ///< Componentes de color RGBA.
   };
 
+  /**
+   * @struct TransformBuffer
+   * @brief Búfer constante alineado a 16 bytes para la matriz de transformación World-View-Projection.
+   */
   struct alignas(16) TransformBuffer
   {
-    DirectX::XMFLOAT4X4 worldViewProjection;
+    DirectX::XMFLOAT4X4 worldViewProjection; ///< Matriz WVP combinada.
   };
 
-  HWND window = nullptr;
+  HWND window = nullptr;                 ///< Identificador de la ventana nativa de la aplicación.
 
-  std::uint32_t width = 0;
-  std::uint32_t height = 0;
+  std::uint32_t width = 0;               ///< Ancho actual del área de renderizado.
+  std::uint32_t height = 0;              ///< Alto actual del área de renderizado.
 
-  Device device;
-  DeviceContext context;
-  Texture2D texture;
+  Device device;                         ///< Instancia del dispositivo gráfico encapsulado.
+  DeviceContext context;                 ///< Instancia del contexto del dispositivo encapsulado.
+  Texture2D texture;                     ///< Textura bidimensional cargada para el motor.
 
-  IDXGISwapChain* swapChain = nullptr;
+  IDXGISwapChain* swapChain = nullptr;   ///< Cadena de intercambio de DirectX.
 
-  ID3D11RenderTargetView* renderTarget = nullptr;
+  ID3D11RenderTargetView* renderTarget = nullptr; ///< Vista de objetivo de renderizado principal.
 
-  ID3D11Texture2D* depthStencilBuffer = nullptr;
-  ID3D11DepthStencilView* depthStencilView = nullptr;
+  ID3D11Texture2D* depthStencilBuffer = nullptr;       ///< Búfer de textura para profundidad y plantilla.
+  ID3D11DepthStencilView* depthStencilView = nullptr; ///< Vista del búfer de profundidad y plantilla.
 
-  ID3D11Buffer* vertexBuffer = nullptr;
-  ID3D11Buffer* indexBuffer = nullptr;
-  ID3D11Buffer* transformBuffer = nullptr;
+  ID3D11Buffer* vertexBuffer = nullptr;    ///< Búfer de vértices de la geometría.
+  ID3D11Buffer* indexBuffer = nullptr;     ///< Búfer de índices de la geometría.
+  ID3D11Buffer* transformBuffer = nullptr; ///< Búfer constante de transformaciones.
 
-  ID3D11RasterizerState* rasterizerState = nullptr;
+  ID3D11RasterizerState* rasterizerState = nullptr; ///< Estado del rasterizador (culling, fill mode).
 
-  ID3D11VertexShader* vertexShader = nullptr;
-  ID3D11PixelShader* pixelShader = nullptr;
-  ID3D11InputLayout* inputLayout = nullptr;
+  ID3D11VertexShader* vertexShader = nullptr;   ///< Sombreador de vértices compilado.
+  ID3D11PixelShader* pixelShader = nullptr;     ///< Sombreador de píxeles compilado.
+  ID3D11InputLayout* inputLayout = nullptr;     ///< Diseño de entrada de los vértices.
 
-  std::chrono::steady_clock::time_point startTime{};
+  std::chrono::steady_clock::time_point startTime{}; ///< Tiempo de inicio para calcular animaciones basadas en tiempo.
 
-  static bool CompileShader(
-    const wchar_t* filename,
-    const char* entryPoint,
-    const char* shaderModel,
-    ID3DBlob** shaderBlob) noexcept
+  /**
+   * @brief Compila un archivo de sombreador (HLSL) en tiempo de ejecución generando su respectivo Blob.
+   *
+   * @param filename Ruta del archivo de código fuente HLSL.
+   * @param entryPoint Nombre de la función de entrada en el sombreador (ej. "VSMain", "PSMain").
+   * @param shaderModel Versión del modelo de sombreador (ej. "vs_5_0", "ps_5_0").
+   * @param shaderBlob Puntero donde se almacenará el objeto ID3DBlob resultante con el bytecode.
+   * @return true si la compilación fue exitosa, de lo contrario false.
+   */
+  static bool
+    CompileShader(
+      const wchar_t* filename,
+      const char* entryPoint,
+      const char* shaderModel,
+      ID3DBlob** shaderBlob
+    ) noexcept
   {
     if (!filename ||
       !entryPoint ||
@@ -65,14 +93,10 @@ struct Engine::Implementation
       D3DCOMPILE_ENABLE_STRICTNESS;
 
 #ifdef _DEBUG
-
     compileFlags |= D3DCOMPILE_DEBUG;
     compileFlags |= D3DCOMPILE_SKIP_OPTIMIZATION;
-
 #else
-
     compileFlags |= D3DCOMPILE_OPTIMIZATION_LEVEL3;
-
 #endif
 
     ID3DBlob* errors = nullptr;
@@ -110,7 +134,11 @@ struct Engine::Implementation
     return true;
   }
 
-  void ReleaseResources() noexcept
+  /**
+   * @brief Libera de forma segura todos los recursos, sombreadores, búferes y vistas asignados en la GPU.
+   */
+  void
+    ReleaseResources() noexcept
   {
     SafeRelease(rasterizerState);
 
@@ -140,14 +168,18 @@ struct Engine::Implementation
   }
 };
 
-
+/**
+ * @brief Construye una nueva instancia del motor gráfico inicializando el contenedor PImpl.
+ */
 Engine::Engine() noexcept
   : m_implementation(
     new (std::nothrow) Implementation{}
   )
 {}
 
-
+/**
+ * @brief Destructor de la clase Engine que asegura la liberación de recursos.
+ */
 Engine::~Engine() noexcept
 {
   Shutdown();
@@ -156,8 +188,16 @@ Engine::~Engine() noexcept
   m_implementation = nullptr;
 }
 
-
-bool Engine::Initialize(
+/**
+ * @brief Inicializa el motor gráfico, la ventana de intercambio, los búferes, las texturas y compila los sombreadores.
+ *
+ * @param nativeWindow Identificador de la ventana nativa (HWND).
+ * @param width Ancho inicial de la ventana.
+ * @param height Alto inicial de la ventana.
+ * @return true si la inicialización fue completamente exitosa, de lo contrario false.
+ */
+bool
+Engine::Initialize(
   void* nativeWindow,
   std::uint32_t width,
   std::uint32_t height
@@ -182,10 +222,10 @@ bool Engine::Initialize(
   engine.width = width;
   engine.height = height;
 
-
-  // ========================================================
-  // SWAP CHAIN
-  // ========================================================
+  /** @brief Configura la cadena de intercambio que presenta los fotogramas en pantalla. */
+// ========================================================
+// SWAP CHAIN
+// ========================================================
 
   DXGI_SWAP_CHAIN_DESC swapChainDescription{};
 
@@ -224,10 +264,10 @@ bool Engine::Initialize(
   swapChainDescription.SwapEffect =
     DXGI_SWAP_EFFECT_DISCARD;
 
-
-  // ========================================================
-  // DIRECT3D 11
-  // ========================================================
+  /** @brief Crea el dispositivo y el contexto de Direct3D 11, con una alternativa WARP si falla el hardware. */
+// ========================================================
+// DIRECT3D 11
+// ========================================================
 
   constexpr D3D_FEATURE_LEVEL featureLevels[]
   {
@@ -251,7 +291,6 @@ bool Engine::Initialize(
       &selectedFeatureLevel,
       engine.context.getDeviceContextAddress()
     );
-
 
   if (FAILED(result))
   {
@@ -277,17 +316,16 @@ bool Engine::Initialize(
       );
   }
 
-
   if (FAILED(result))
   {
     engine.ReleaseResources();
     return false;
   }
 
-
-  // ========================================================
-  // TEXTURA
-  // ========================================================
+  /** @brief Inicializa la textura que utilizará la geometría durante el renderizado. */
+// ========================================================
+// TEXTURA
+// ========================================================
 
   result =
     engine.texture.init(
@@ -302,10 +340,10 @@ bool Engine::Initialize(
     return false;
   }
 
-
-  // ========================================================
-  // BACK BUFFER
-  // ========================================================
+  /** @brief Obtiene el búfer trasero de la cadena de intercambio. */
+// ========================================================
+// BACK BUFFER
+// ========================================================
 
   ID3D11Texture2D* backBuffer = nullptr;
 
@@ -318,17 +356,16 @@ bool Engine::Initialize(
         )
     );
 
-
   if (FAILED(result))
   {
     engine.ReleaseResources();
     return false;
   }
 
-
-  // ========================================================
-  // RENDER TARGET
-  // ========================================================
+  /** @brief Crea la vista que permite utilizar el búfer trasero como destino de renderizado. */
+// ========================================================
+// RENDER TARGET
+// ========================================================
 
   result =
     engine.device.CreateRenderTargetView(
@@ -339,17 +376,16 @@ bool Engine::Initialize(
 
   SafeRelease(backBuffer);
 
-
   if (FAILED(result))
   {
     engine.ReleaseResources();
     return false;
   }
 
-
-  // ========================================================
-  // VIEWPORT
-  // ========================================================
+  /** @brief Define el área de la ventana donde se dibujará la escena. */
+// ========================================================
+// VIEWPORT
+// ========================================================
 
   D3D11_VIEWPORT viewport{};
 
@@ -369,16 +405,15 @@ bool Engine::Initialize(
   viewport.MinDepth = 0.0f;
   viewport.MaxDepth = 1.0f;
 
-
   engine.context.RSSetViewports(
     1,
     &viewport
   );
 
-
-  // ========================================================
-  // DEPTH BUFFER
-  // ========================================================
+  /** @brief Crea el búfer utilizado para almacenar la profundidad de los fragmentos. */
+// ========================================================
+// DEPTH BUFFER
+// ========================================================
 
   D3D11_TEXTURE2D_DESC depthBufferDescription{};
 
@@ -409,7 +444,6 @@ bool Engine::Initialize(
   depthBufferDescription.BindFlags =
     D3D11_BIND_DEPTH_STENCIL;
 
-
   result =
     engine.device.CreateTexture2D(
       &depthBufferDescription,
@@ -417,17 +451,16 @@ bool Engine::Initialize(
       &engine.depthStencilBuffer
     );
 
-
   if (FAILED(result))
   {
     engine.ReleaseResources();
     return false;
   }
 
-
-  // ========================================================
-  // DEPTH STENCIL VIEW
-  // ========================================================
+  /** @brief Crea la vista que permite utilizar el búfer de profundidad en el pipeline. */
+// ========================================================
+// DEPTH STENCIL VIEW
+// ========================================================
 
   result =
     engine.device.CreateDepthStencilView(
@@ -436,21 +469,19 @@ bool Engine::Initialize(
       &engine.depthStencilView
     );
 
-
   if (FAILED(result))
   {
     engine.ReleaseResources();
     return false;
   }
 
-
-  // ========================================================
-  // SHADERS
-  // ========================================================
+  /** @brief Compila los programas HLSL de vértices y píxeles. */
+// ========================================================
+// SHADERS
+// ========================================================
 
   ID3DBlob* vertexShaderBlob = nullptr;
   ID3DBlob* pixelShaderBlob = nullptr;
-
 
   if (!Implementation::CompileShader(
     L"shaders\\Cube.hlsl",
@@ -462,7 +493,6 @@ bool Engine::Initialize(
     engine.ReleaseResources();
     return false;
   }
-
 
   if (!Implementation::CompileShader(
     L"shaders\\Cube.hlsl",
@@ -477,10 +507,10 @@ bool Engine::Initialize(
     return false;
   }
 
-
-  // ========================================================
-  // VERTEX SHADER
-  // ========================================================
+  /** @brief Crea el objeto Direct3D correspondiente al vertex shader compilado. */
+// ========================================================
+// VERTEX SHADER
+// ========================================================
 
   result =
     engine.device.CreateVertexShader(
@@ -490,7 +520,6 @@ bool Engine::Initialize(
       &engine.vertexShader
     );
 
-
   if (FAILED(result))
   {
     SafeRelease(pixelShaderBlob);
@@ -500,10 +529,10 @@ bool Engine::Initialize(
     return false;
   }
 
-
-  // ========================================================
-  // PIXEL SHADER
-  // ========================================================
+  /** @brief Crea el objeto Direct3D correspondiente al pixel shader compilado. */
+// ========================================================
+// PIXEL SHADER
+// ========================================================
 
   result =
     engine.device.CreatePixelShader(
@@ -513,7 +542,6 @@ bool Engine::Initialize(
       &engine.pixelShader
     );
 
-
   if (FAILED(result))
   {
     SafeRelease(pixelShaderBlob);
@@ -523,10 +551,10 @@ bool Engine::Initialize(
     return false;
   }
 
-
-  // ========================================================
-  // INPUT LAYOUT
-  // ========================================================
+  /** @brief Describe la organización de los atributos de cada vértice para el vertex shader. */
+// ========================================================
+// INPUT LAYOUT
+// ========================================================
 
   constexpr D3D11_INPUT_ELEMENT_DESC inputElements[]
   {
@@ -561,7 +589,6 @@ bool Engine::Initialize(
       }
   };
 
-
   result =
     engine.device.CreateInputLayout(
       inputElements,
@@ -571,10 +598,8 @@ bool Engine::Initialize(
       &engine.inputLayout
     );
 
-
   SafeRelease(pixelShaderBlob);
   SafeRelease(vertexShaderBlob);
-
 
   if (FAILED(result))
   {
@@ -582,10 +607,10 @@ bool Engine::Initialize(
     return false;
   }
 
-
-  // ========================================================
-  // CUBE VERTICES
-  // ========================================================
+  /** @brief Define las posiciones y los colores de los ocho vértices del cubo. */
+// ========================================================
+// CUBE VERTICES
+// ========================================================
 
   constexpr Implementation::Vertex vertices[]
   {
@@ -630,10 +655,10 @@ bool Engine::Initialize(
       }
   };
 
-
-  // ========================================================
-  // VERTEX BUFFER
-  // ========================================================
+  /** @brief Crea el búfer de GPU que almacena los vértices del cubo. */
+// ========================================================
+// VERTEX BUFFER
+// ========================================================
 
   D3D11_BUFFER_DESC vertexBufferDescription{};
 
@@ -648,12 +673,10 @@ bool Engine::Initialize(
   vertexBufferDescription.BindFlags =
     D3D11_BIND_VERTEX_BUFFER;
 
-
   D3D11_SUBRESOURCE_DATA initialVertexData{};
 
   initialVertexData.pSysMem =
     vertices;
-
 
   result =
     engine.device.CreateBuffer(
@@ -662,17 +685,16 @@ bool Engine::Initialize(
       &engine.vertexBuffer
     );
 
-
   if (FAILED(result))
   {
     engine.ReleaseResources();
     return false;
   }
 
-
-  // ========================================================
-  // INDEX BUFFER
-  // ========================================================
+  /** @brief Crea el búfer de índices que indica cómo formar los triángulos del cubo. */
+// ========================================================
+// INDEX BUFFER
+// ========================================================
 
   constexpr std::uint16_t indices[]
   {
@@ -695,7 +717,6 @@ bool Engine::Initialize(
       3, 6, 7
   };
 
-
   D3D11_BUFFER_DESC indexBufferDescription{};
 
   indexBufferDescription.ByteWidth =
@@ -709,12 +730,10 @@ bool Engine::Initialize(
   indexBufferDescription.BindFlags =
     D3D11_BIND_INDEX_BUFFER;
 
-
   D3D11_SUBRESOURCE_DATA indexData{};
 
   indexData.pSysMem =
     indices;
-
 
   result =
     engine.device.CreateBuffer(
@@ -723,17 +742,16 @@ bool Engine::Initialize(
       &engine.indexBuffer
     );
 
-
   if (FAILED(result))
   {
     engine.ReleaseResources();
     return false;
   }
 
-
-  // ========================================================
-  // TRANSFORM BUFFER
-  // ========================================================
+  /** @brief Crea el búfer constante que recibirá la matriz World-View-Projection. */
+// ========================================================
+// TRANSFORM BUFFER
+// ========================================================
 
   D3D11_BUFFER_DESC transformBufferDescription{};
 
@@ -748,7 +766,6 @@ bool Engine::Initialize(
   transformBufferDescription.BindFlags =
     D3D11_BIND_CONSTANT_BUFFER;
 
-
   result =
     engine.device.CreateBuffer(
       &transformBufferDescription,
@@ -756,17 +773,16 @@ bool Engine::Initialize(
       &engine.transformBuffer
     );
 
-
   if (FAILED(result))
   {
     engine.ReleaseResources();
     return false;
   }
 
-
-  // ========================================================
-  // RASTERIZER STATE
-  // ========================================================
+  /** @brief Configura el rasterizador, incluyendo el modo de relleno y descarte de caras. */
+// ========================================================
+// RASTERIZER STATE
+// ========================================================
 
   D3D11_RASTERIZER_DESC rasterizerDescription{};
 
@@ -779,13 +795,11 @@ bool Engine::Initialize(
   rasterizerDescription.DepthClipEnable =
     TRUE;
 
-
   result =
     engine.device.CreateRasterizerState(
       &rasterizerDescription,
       &engine.rasterizerState
     );
-
 
   if (FAILED(result))
   {
@@ -793,24 +807,34 @@ bool Engine::Initialize(
     return false;
   }
 
-
-  // ========================================================
-  // START TIME
-  // ========================================================
+  /** @brief Guarda el instante inicial utilizado para calcular la animación del cubo. */
+// ========================================================
+// START TIME
+// ========================================================
 
   engine.startTime =
     std::chrono::steady_clock::now();
 
-
   return true;
 }
 
-
+/**
+ * @brief Actualiza la lógica interna del motor en cada iteración del bucle principal.
+ *
+ * @details Actualmente no contiene operaciones, pero sirve como punto de entrada
+ * para incorporar futuras actualizaciones de la escena y de sus componentes.
+ */
 void
 Engine::Update() noexcept
 {}
 
-
+/**
+ * @brief Ejecuta el pipeline de renderizado y dibujo del cubo 3D.
+ *
+ * @details Comprueba los recursos gráficos, limpia los búferes, calcula las
+ * transformaciones, enlaza los recursos necesarios, dibuja el cubo y presenta
+ * el resultado mediante la cadena de intercambio.
+ */
 void
 Engine::Render() noexcept
 {
@@ -821,7 +845,6 @@ Engine::Render() noexcept
 
   Implementation& engine =
     *m_implementation;
-
 
   if (!engine.context.getDeviceContext() ||
     !engine.swapChain ||
@@ -838,10 +861,10 @@ Engine::Render() noexcept
     return;
   }
 
-
-  // ========================================================
-  // CLEAR COLOR
-  // ========================================================
+  /** @brief Define el color con el que se limpia la pantalla antes de dibujar. */
+// ========================================================
+// CLEAR COLOR
+// ========================================================
 
   constexpr float clearColor[]
   {
@@ -851,10 +874,10 @@ Engine::Render() noexcept
       1.0f
   };
 
-
-  // ========================================================
-  // RENDER TARGET + DEPTH
-  // ========================================================
+  /** @brief Establece el destino de renderizado y limpia los búferes de color y profundidad. */
+// ========================================================
+// RENDER TARGET + DEPTH
+// ========================================================
 
   engine.context.OMSetRenderTargets(
     1,
@@ -862,12 +885,10 @@ Engine::Render() noexcept
     engine.depthStencilView
   );
 
-
   engine.context.ClearRenderTargetView(
     engine.renderTarget,
     clearColor
   );
-
 
   engine.context.ClearDepthStencilView(
     engine.depthStencilView,
@@ -877,10 +898,10 @@ Engine::Render() noexcept
     0
   );
 
-
-  // ========================================================
-  // TIME
-  // ========================================================
+  /** @brief Calcula el tiempo transcurrido desde la inicialización del motor. */
+// ========================================================
+// TIME
+// ========================================================
 
   const auto currentTime =
     std::chrono::steady_clock::now();
@@ -891,10 +912,10 @@ Engine::Render() noexcept
       engine.startTime
     ).count();
 
-
-  // ========================================================
-  // WORLD
-  // ========================================================
+  /** @brief Calcula la transformación del objeto en el espacio del mundo. */
+// ========================================================
+// WORLD
+// ========================================================
 
   using namespace DirectX;
 
@@ -906,10 +927,10 @@ Engine::Render() noexcept
       elapsedSeconds * 0.8f
     );
 
-
-  // ========================================================
-  // CAMERA
-  // ========================================================
+  /** @brief Define la posición, el objetivo y la orientación de la cámara. */
+// ========================================================
+// CAMERA
+// ========================================================
 
   const XMVECTOR cameraPosition =
     XMVectorSet(
@@ -935,7 +956,6 @@ Engine::Render() noexcept
       0.0f
     );
 
-
   const XMMATRIX view =
     XMMatrixLookAtLH(
       cameraPosition,
@@ -943,10 +963,10 @@ Engine::Render() noexcept
       cameraUp
     );
 
-
-  // ========================================================
-  // PROJECTION
-  // ========================================================
+  /** @brief Calcula la matriz de proyección en perspectiva según la proporción de la ventana. */
+// ========================================================
+// PROJECTION
+// ========================================================
 
   const float aspectRatio =
     static_cast<float>(
@@ -956,7 +976,6 @@ Engine::Render() noexcept
       engine.height
       );
 
-
   const XMMATRIX projection =
     XMMatrixPerspectiveFovLH(
       XM_PIDIV4,
@@ -965,13 +984,12 @@ Engine::Render() noexcept
       100.0f
     );
 
-
-  // ========================================================
-  // TRANSFORM
-  // ========================================================
+  /** @brief Combina las matrices de mundo, vista y proyección para el shader. */
+// ========================================================
+// TRANSFORM
+// ========================================================
 
   Implementation::TransformBuffer transform{};
-
 
   XMStoreFloat4x4(
     &transform.worldViewProjection,
@@ -983,10 +1001,10 @@ Engine::Render() noexcept
     )
   );
 
-
-  // ========================================================
-  // UPDATE CONSTANT BUFFER
-  // ========================================================
+  /** @brief Actualiza el búfer constante con la matriz de transformación calculada. */
+// ========================================================
+// UPDATE CONSTANT BUFFER
+// ========================================================
 
   engine.context.UpdateSubresource(
     engine.transformBuffer,
@@ -997,16 +1015,15 @@ Engine::Render() noexcept
     0
   );
 
-
-  // ========================================================
-  // VERTEX BUFFER
-  // ========================================================
+  /** @brief Enlaza el búfer de vértices al ensamblador de entrada. */
+// ========================================================
+// VERTEX BUFFER
+// ========================================================
 
   constexpr UINT stride =
     sizeof(Implementation::Vertex);
 
   constexpr UINT offset = 0;
-
 
   engine.context.IASetVertexBuffers(
     0,
@@ -1016,10 +1033,10 @@ Engine::Render() noexcept
     &offset
   );
 
-
-  // ========================================================
-  // INDEX BUFFER
-  // ========================================================
+  /** @brief Enlaza el búfer de índices y especifica el formato de sus elementos. */
+// ========================================================
+// INDEX BUFFER
+// ========================================================
 
   engine.context.IASetIndexBuffer(
     engine.indexBuffer,
@@ -1027,46 +1044,46 @@ Engine::Render() noexcept
     0
   );
 
-
-  // ========================================================
-  // INPUT LAYOUT
-  // ========================================================
+  /** @brief Establece la descripción de los atributos de los vértices. */
+// ========================================================
+// INPUT LAYOUT
+// ========================================================
 
   engine.context.IASetInputLayout(
     engine.inputLayout
   );
 
-
-  // ========================================================
-  // RASTERIZER
-  // ========================================================
+  /** @brief Activa el estado de rasterización configurado durante la inicialización. */
+// ========================================================
+// RASTERIZER
+// ========================================================
 
   engine.context.RSSetState(
     engine.rasterizerState
   );
 
-
-  // ========================================================
-  // TOPOLOGY
-  // ========================================================
+  /** @brief Indica que la geometría se procesa como una lista de triángulos. */
+// ========================================================
+// TOPOLOGY
+// ========================================================
 
   engine.context.IASetPrimitiveTopology(
     D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST
   );
 
-
-  // ========================================================
-  // VERTEX SHADER
-  // ========================================================
+  /** @brief Establece el vertex shader que procesará los vértices. */
+// ========================================================
+// VERTEX SHADER
+// ========================================================
 
   engine.context.VSSetShader(
     engine.vertexShader
   );
 
-
-  // ========================================================
-  // TRANSFORM BUFFER
-  // ========================================================
+  /** @brief Enlaza el búfer de transformaciones al vertex shader. */
+// ========================================================
+// TRANSFORM BUFFER
+// ========================================================
 
   engine.context.VSSetConstantBuffers(
     0,
@@ -1074,19 +1091,19 @@ Engine::Render() noexcept
     &engine.transformBuffer
   );
 
-
-  // ========================================================
-  // PIXEL SHADER
-  // ========================================================
+  /** @brief Establece el pixel shader que calculará el color de los píxeles. */
+// ========================================================
+// PIXEL SHADER
+// ========================================================
 
   engine.context.PSSetShader(
     engine.pixelShader
   );
 
-
-  // ========================================================
-  // TEXTURE
-  // ========================================================
+  /** @brief Enlaza la textura al pipeline gráfico para utilizarla al dibujar. */
+// ========================================================
+// TEXTURE
+// ========================================================
 
   engine.texture.render(
     engine.context,
@@ -1094,10 +1111,10 @@ Engine::Render() noexcept
     1
   );
 
-
-  // ========================================================
-  // DRAW CUBE
-  // ========================================================
+  /** @brief Ejecuta el dibujo del cubo utilizando sus 36 índices. */
+// ========================================================
+// DRAW CUBE
+// ========================================================
 
   engine.context.DrawIndexed(
     36,
@@ -1105,10 +1122,10 @@ Engine::Render() noexcept
     0
   );
 
-
-  // ========================================================
-  // PRESENT
-  // ========================================================
+  /** @brief Presenta en pantalla el fotograma que se acaba de renderizar. */
+// ========================================================
+// PRESENT
+// ========================================================
 
   engine.swapChain->Present(
     1,
@@ -1116,7 +1133,12 @@ Engine::Render() noexcept
   );
 }
 
-
+/**
+ * @brief Finaliza el motor y libera todos los recursos gráficos y del sistema.
+ *
+ * @details Comprueba que la implementación exista y llama a ReleaseResources()
+ * para liberar los objetos de DirectX 11 y restablecer los datos de la ventana.
+ */
 void
 Engine::Shutdown() noexcept
 {
