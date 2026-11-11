@@ -91,8 +91,7 @@
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAFQAAAABAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000677|",
               "WhenOpened": "2026-09-14T01:39:34.525Z",
-              "IsPinned": true,
-              "EditorCaption": ""
+              "IsPinned": true
             },
             {
               "$type": "Document",
@@ -104,8 +103,7 @@
               "RelativeToolTip": "Grafica3DEngine\\source\\Rendering\\Device.cpp",
               "ViewState": "AgIAADEBAAAAAAAAAAAIwFQBAAABAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000677|",
-              "WhenOpened": "2026-10-07T13:44:49.058Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-10-07T13:44:49.058Z"
             },
             {
               "$type": "Document",
@@ -117,8 +115,7 @@
               "RelativeToolTip": "Grafica3DEngine\\include\\Rendering\\Texture2D.h",
               "ViewState": "AgIAAIkAAAAAAAAAAAAIwKwAAAACAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000680|",
-              "WhenOpened": "2026-10-19T13:25:15.766Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-10-19T13:25:15.766Z"
             },
             {
               "$type": "Document",
@@ -130,8 +127,7 @@
               "RelativeToolTip": "Grafica3DEngine\\include\\Engine\\MeshComponent.h",
               "ViewState": "AgIAAAMAAAAAAAAAAAAIwCYAAAACAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000680|",
-              "WhenOpened": "2026-10-26T13:35:49.651Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-10-26T13:35:49.651Z"
             },
             {
               "$type": "Document",
@@ -143,8 +139,7 @@
               "RelativeToolTip": "Grafica3DEngine\\source\\Rendering\\Buffer.cpp",
               "ViewState": "AgIAAOsAAAAAAAAAAAAIwA4BAAABAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000677|",
-              "WhenOpened": "2026-10-26T14:21:19.795Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-10-26T14:21:19.795Z"
             },
             {
               "$type": "Document",
@@ -156,8 +151,7 @@
               "RelativeToolTip": "Grafica3DEngine\\include\\Rendering\\DeviceContext.cpp",
               "ViewState": "AgIAAG0BAAAAAAAAAAAIwJABAAABAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000677|",
-              "WhenOpened": "2026-10-12T13:28:49.086Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-10-12T13:28:49.086Z"
             },
             {
               "$type": "Document",
@@ -165,9 +159,9 @@
               "Title": "Texture2D.cpp",
               "DocumentMoniker": "D:\\Repos\\GraficasComputacionales3D\\EngineXd\\Grafica3DEngine\\source\\Rendering\\Texture2D.cpp",
               "RelativeDocumentMoniker": "Grafica3DEngine\\source\\Rendering\\Texture2D.cpp",
-              "ToolTip": "D:\\Repos\\GraficasComputacionales3D\\EngineXd\\Grafica3DEngine\\source\\Rendering\\Texture2D.cpp*",
-              "RelativeToolTip": "Grafica3DEngine\\source\\Rendering\\Texture2D.cpp*",
-              "ViewState": "AgIAAH8AAAAAAAAAAAAIwKIAAAABAAAAAAAAAA==",
+              "ToolTip": "D:\\Repos\\GraficasComputacionales3D\\EngineXd\\Grafica3DEngine\\source\\Rendering\\Texture2D.cpp",
+              "RelativeToolTip": "Grafica3DEngine\\source\\Rendering\\Texture2D.cpp",
+              "ViewState": "AgIAAHUAAAAAAAAAAAAAACsAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000677|",
               "WhenOpened": "2026-10-19T14:24:50.608Z",
               "EditorCaption": ""
@@ -182,8 +176,7 @@
               "RelativeToolTip": "Grafica3DEngine\\source\\Engine.cpp",
               "ViewState": "AgIAAFkEAAAAAAAAAAAIwHwEAAABAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000677|",
-              "WhenOpened": "2026-09-14T01:39:27.305Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-09-14T01:39:27.305Z"
             },
             {
               "$type": "Document",
@@ -195,8 +188,7 @@
               "RelativeToolTip": "Grafica3DEngine\\include\\Rendering\\DeviceContext.h",
               "ViewState": "AgIAAOMAAAAAAAAAAAAIwAYBAAACAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000680|",
-              "WhenOpened": "2026-10-12T13:20:24.659Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-10-12T13:20:24.659Z"
             },
             {
               "$type": "Document",
@@ -208,8 +200,7 @@
               "RelativeToolTip": "Grafica3DEngine\\include\\Rendering\\Device.h",
               "ViewState": "AgIAAJoAAAAAAAAAAAAIwL0AAAACAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000680|",
-              "WhenOpened": "2026-10-12T12:55:10.055Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-10-12T12:55:10.055Z"
             },
             {
               "$type": "Document",
@@ -221,8 +212,7 @@
               "RelativeToolTip": "Grafica3DEngine\\include\\Engine\\Prerequisitos.h",
               "ViewState": "AgIAAHgAAAAAAAAAAAAIwJsAAAABAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000680|",
-              "WhenOpened": "2026-10-05T13:28:36.312Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-10-05T13:28:36.312Z"
             },
             {
               "$type": "Document",
@@ -234,8 +224,7 @@
               "RelativeToolTip": "Sandbox\\source\\Window.cpp",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAP8AAAABAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000677|",
-              "WhenOpened": "2026-09-21T13:49:24.673Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-09-21T13:49:24.673Z"
             },
             {
               "$type": "Document",
@@ -247,8 +236,7 @@
               "RelativeToolTip": "Grafica3DEngine\\include\\Rendering\\SawpChain.h",
               "ViewState": "AgIAAE8AAAAAAAAAAAAIwHIAAAACAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000680|",
-              "WhenOpened": "2026-10-19T13:26:16.098Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-10-19T13:26:16.098Z"
             },
             {
               "$type": "Document",
