@@ -30,14 +30,14 @@
     <ClCompile Include="source\Rendering\Device.cpp">
       <Filter>Archivos de recursos\Rendering</Filter>
     </ClCompile>
-    <ClCompile Include="include\Rendering\DeviceContext.cpp">
-      <Filter>Archivos de recursos\Rendering</Filter>
-    </ClCompile>
     <ClCompile Include="source\Rendering\Texture2D.cpp">
       <Filter>Archivos de recursos\Rendering</Filter>
     </ClCompile>
     <ClCompile Include="source\Rendering\Buffer.cpp">
       <Filter>Archivos de recursos\Rendering</Filter>
+    </ClCompile>
+    <ClCompile Include="source\Rendering\DeviceContext.cpp">
+      <Filter>Archivos de recursos</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -66,6 +66,15 @@
       <Filter>Archivos de encabezado\Engine</Filter>
     </ClInclude>
     <ClInclude Include="include\Rendering\Buffer.h">
+      <Filter>Archivos de encabezado\Rendering</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Rendering\RenderTargetView.h">
+      <Filter>Archivos de encabezado\Rendering</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Rendering\DepthStencilView.h">
+      <Filter>Archivos de encabezado\Rendering</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Rendering\ResterizerState.h">
       <Filter>Archivos de encabezado\Rendering</Filter>
     </ClInclude>
   </ItemGroup>
